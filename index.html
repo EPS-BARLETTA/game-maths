@@ -1,246 +1,185 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcul de VMA</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-        }
-        input, select, button {
-            font-size: 18px;
-            margin: 10px 0;
-            padding: 10px;
-        }
-        button {
-            cursor: pointer;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            margin: 5px;
-        }
-        .btn-start { background-color: #4CAF50; }
-        .btn-plot { background-color: #2196F3; }
-        .btn-reset, .btn-download {
-            background-color: #FF9800;
-            display: none;
-        }
-        .input-row {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .info-box {
-            border: 2px solid green;
-            padding: 10px;
-            margin: 20px 0;
-            font-weight: bold;
-            color: green;
-        }
-        .results {
-            margin-top: 20px;
-            font-size: 16px;
-        }
-        #countdownBox {
-            display: none;
-            background-color: red;
-            color: white;
-            font-weight: bold;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        #authorSection {
-            margin-top: 30px;
-            border: 1px solid black;
-            padding: 10px;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Jeu de Maths</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #222;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    .button {
+      padding: 12px 25px;
+      margin: 10px;
+      background: #4CAF50;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 1.1em;
+    }
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1.1em;
+      margin: 10px;
+    }
+    #question {
+      font-size: 2.2em;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Calcul de la VMA</h1>
+<h1>🎮 Jeu de Maths</h1>
 
-    <input type="text" id="runnerName" placeholder="Nom du coureur" required>
-    <input type="text" id="observerName" placeholder="Nom de l'observateur" required>
+<!-- ÉCRAN D'ACCUEIL -->
+<div id="start">
+  <p>Prénom : <input id="prenom"></p>
+  <p>Classe : <input id="classe"></p>
 
-    <div class="input-row">
-        <div>
-            <label for="runnerVMA">VMA (km/h) :</label>
-            <input type="number" id="runnerVMA" placeholder="VMA du coureur" required step="0.5" oninput="updatePrediction()">
-        </div>
-        <div>
-            <label for="targetPercentage">Pourcentage de VMA (%) :</label>
-            <input type="number" id="targetPercentage" placeholder="Ex: 50" required step="0.5" oninput="updatePrediction()">
-        </div>
-    </div>
+  <h3>Choisir un mode :</h3>
+  <button class="button" onclick="startGame('multiplication')">Multiplications</button>
+  <button class="button" onclick="startGame('addition')">Additions</button>
+  <button class="button" onclick="startGame('chrono')">Calcul Chrono</button>
+</div>
 
-    <label for="duration">Durée de la course :</label>
-    <select id="duration">
-        <option value="90">1:30</option>
-        <option value="180">3:00</option>
-        <option value="270">4:30</option>
-        <option value="360">6:00</option>
-    </select>
+<!-- ÉCRAN DE JEU -->
+<div id="game" style="display:none;">
+  <div id="question"></div>
+  <input id="answer" autofocus>
+  <br>
+  <button class="button" onclick="submitAnswer()">Valider</button>
 
-    <div id="infoBox" class="info-box" style="display:none;"></div>
+  <p id="progress" style="margin-top:20px; font-size:1.3em;"></p>
+</div>
 
-    <div>
-        <button class="btn-start" onclick="startRace()">Démarrer</button>
-        <button class="btn-plot" onclick="addPlot()">Passer un plot</button>
-    </div>
+<!-- ÉCRAN DE RESULTATS -->
+<div id="result" style="display:none;">
+  <h2>Résultat</h2>
+  <p id="scoreText" style="font-size:1.6em;"></p>
+  <p id="advice" style="font-size:1.3em; margin-bottom:20px;"></p>
 
-    <div id="controlSection" style="display:none;">
-        <p>Temps écoulé : <span id="timeElapsed">0:00</span></p>
-        <p>Plots passés : <span id="plotCount">0</span></p>
-        <div id="countdownBox"></div>
-        <div id="resultsLog"></div>
-        <button class="btn-reset" id="resetBtn" onclick="resetData()">Réinitialiser</button>
-        <button class="btn-download" id="downloadBtn" onclick="downloadResults()">Télécharger</button>
-    </div>
+  <canvas id="qr"></canvas>
+</div>
 
-    <div id="authorSection">
-        <p>Auteur : Jérôme BARLETTA</p>
-        <a href="http://bjerome.eklablog.com/accueil-c30088056" target="_blank">Accéder au blog</a>
-    </div>
+<script>
 
-    <script>
-        let duration, interval, timeElapsed = 0, plotCount = 0, results = [], countdownInterval;
+let mode, prenom, classe;
+let currentQuestion, correctAnswer;
+let questionCount = 0;
+let correctCount = 0;
+let mistakes = {};  // stocke erreurs par table
 
-        function updatePrediction() {
-            const runnerVMA = parseFloat(document.getElementById("runnerVMA").value);
-            const targetPercentage = parseFloat(document.getElementById("targetPercentage").value);
+function startGame(selectedMode) {
+  prenom = document.getElementById("prenom").value;
+  classe = document.getElementById("classe").value;
+  mode = selectedMode;
 
-            if (!isNaN(runnerVMA) && !isNaN(targetPercentage)) {
-                const targetVMA = (runnerVMA * (targetPercentage / 100)).toFixed(2);
-                const expectedPlots = targetVMA * 2; // Nombre de plots par période de 1m30
-                document.getElementById("infoBox").style.display = "block";
-                document.getElementById("infoBox").textContent = `Le coureur doit passer ${expectedPlots} plots en 1:30.`;
-            }
-        }
+  if (!prenom || !classe) {
+    alert("Merci d’entrer un prénom et une classe.");
+    return;
+  }
 
-        function startRace() {
-            duration = parseFloat(document.getElementById("duration").value);
-            plotCount = 0;
-            results = [];
-            timeElapsed = 0;
+  document.getElementById("start").style.display = "none";
+  document.getElementById("game").style.display = "block";
 
-            document.getElementById("controlSection").style.display = "block";
-            document.getElementById("plotCount").textContent = plotCount;
-            document.getElementById("timeElapsed").textContent = formatTime(0);
-            document.getElementById("resultsLog").innerHTML = "";
-            document.getElementById("authorSection").style.display = "none";
-            document.getElementById("resetBtn").style.display = "none";
-            document.getElementById("downloadBtn").style.display = "none";
+  nextQuestion();
+}
 
-            interval = setInterval(updateTime, 1000);
-        }
+function nextQuestion() {
+  questionCount++;
+  if (questionCount > 10) {
+    finishGame();
+    return;
+  }
 
-        function updateTime() {
-            timeElapsed++;
-            document.getElementById("timeElapsed").textContent = formatTime(timeElapsed);
+  let a = Math.floor(Math.random() * 9) + 1;
+  let b = Math.floor(Math.random() * 9) + 1;
 
-            if (timeElapsed % 90 === 85) {
-                startCountdown();
-            }
+  if (mode === "multiplication") {
+    currentQuestion = `${a} × ${b}`;
+    correctAnswer = a * b;
 
-            if (timeElapsed % 90 === 0) {
-                calculateVMA();
-            }
+    if (!mistakes[`table_${a}`]) mistakes[`table_${a}`] = 0;
+    if (!mistakes[`table_${b}`]) mistakes[`table_${b}`] = 0;
+  }
 
-            if (timeElapsed >= duration) {
-                clearInterval(interval);
-                calculateVMA();
-                endRace();
-            }
-        }
+  if (mode === "addition" || mode === "chrono") {
+    currentQuestion = `${a} + ${b}`;
+    correctAnswer = a + b;
+  }
 
-        function addPlot() {
-            plotCount++;
-            document.getElementById("plotCount").textContent = plotCount;
-        }
+  document.getElementById("question").textContent = currentQuestion;
+  document.getElementById("progress").textContent = `${questionCount}/10`;
 
-        function calculateVMA() {
-            const runnerVMA = parseFloat(document.getElementById("runnerVMA").value);
-            const targetPercentage = parseFloat(document.getElementById("targetPercentage").value);
-            const targetVMA = runnerVMA * (targetPercentage / 100);
-            const expectedPlots = targetVMA * 2; // Plots attendus
+  document.getElementById("answer").value = "";
+}
 
-            const speedDiff = plotCount - expectedPlots;
-            let message = `Après ${formatTime(timeElapsed)} : ${plotCount} plots passés, `;
-            message += speedDiff === 0 ? "aucune erreur." : `${speedDiff > 0 ? "+" : ""}${speedDiff} erreurs.`;
+function submitAnswer() {
+  let ans = parseInt(document.getElementById("answer").value);
 
-            document.getElementById("resultsLog").innerHTML += message + "<br>";
-            results.push(message);
-            plotCount = 0;
-        }
+  if (ans === correctAnswer) {
+    correctCount++;
+  } else {
+    if (mode === "multiplication") {
+      let parts = currentQuestion.split("×");
+      mistakes[`table_${parseInt(parts[0])}`]++;
+      mistakes[`table_${parseInt(parts[1])}`]++;
+    }
+  }
 
-        function endRace() {
-            document.getElementById("authorSection").style.display = "block";
-            document.getElementById("resetBtn").style.display = "inline-block";
-            document.getElementById("downloadBtn").style.display = "inline-block";
-        }
+  nextQuestion();
+}
 
-        function startCountdown() {
-            document.getElementById("countdownBox").style.display = "block";
-            document.getElementById("countdownBox").textContent = "5";
-            countdownInterval = setInterval(() => {
-                const remaining = parseInt(document.getElementById("countdownBox").textContent);
-                if (remaining > 1) {
-                    document.getElementById("countdownBox").textContent = remaining - 1;
-                } else {
-                    clearInterval(countdownInterval);
-                    document.getElementById("countdownBox").style.display = "none";
-                }
-            }, 1000);
-        }
+function finishGame() {
+  document.getElementById("game").style.display = "none";
+  document.getElementById("result").style.display = "block";
 
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-        }
+  let worst = null;
+  let maxErrors = 0;
 
-        function resetData() {
-            document.getElementById("runnerName").value = "";
-            document.getElementById("observerName").value = "";
-            document.getElementById("runnerVMA").value = "";
-            document.getElementById("targetPercentage").value = "";
-            document.getElementById("duration").value = "90";
-            document.getElementById("plotCount").textContent = "0";
-            document.getElementById("timeElapsed").text
+  for (let table in mistakes) {
+    if (mistakes[table] > maxErrors) {
+      maxErrors = mistakes[table];
+      worst = table;
+    }
+  }
 
-            document.getElementById("timeElapsed").textContent = "0:00";
-            document.getElementById("resultsLog").innerHTML = "";
-            document.getElementById("infoBox").style.display = "none";
-            document.getElementById("controlSection").style.display = "none";
-            document.getElementById("authorSection").style.display = "none";
-            document.getElementById("resetBtn").style.display = "none";
-            document.getElementById("downloadBtn").style.display = "none";
-            plotCount = 0;
-            timeElapsed = 0;
-            clearInterval(interval);
-            clearInterval(countdownInterval);
-            results = [];
-        }
+  let adviceMsg = (worst && maxErrors > 0)
+    ? `Travaille la ${worst.replace("table_", "table de ")}`
+    : "Très bon travail !";
 
-        function downloadResults() {
-            const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(results.join("\n"));
-            const downloadAnchor = document.createElement("a");
-            downloadAnchor.href = dataStr;
-            downloadAnchor.download = "resultats_course.txt";
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-        }
-    </script>
+  document.getElementById("advice").textContent = adviceMsg;
+
+  let score = `${correctCount}/10`;
+  document.getElementById("scoreText").textContent = "Score : " + score;
+
+  let data = {
+    prenom: prenom,
+    classe: classe,
+    mode: mode,
+    score: score,
+    erreurs: mistakes,
+    conseil: adviceMsg
+  };
+
+  new QRious({
+    element: document.getElementById("qr"),
+    size: 260,
+    value: JSON.stringify(data)
+  });
+}
+
+</script>
 
 </body>
 </html>
