@@ -1,310 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Jeu de Multiplications - ScanProf</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #222;
-      color: white;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      background: #333;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px #0007;
-      padding: 20px;
-    }
-    h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
-      margin-top: 5px;
-    }
-    .button {
-      padding: 12px 25px;
-      margin: 6px;
-      background: #4CAF50;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      cursor: pointer;
-      font-size: 1.1em;
-      margin-top: 7px;
-    }
-    input {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1.1em;
-      margin: 10px;
-      width: 70%;
-      margin-bottom: 18px;
-      background: #222;
-      color: #fff;
-      outline: none;
-      text-align: center;
-    }
-    #question {
-      font-size: 2.1em;
-      margin: 18px 0;
-      min-height: 2em;
-    }
-    @media (max-width:600px) {
-      .container { max-width: 100%; }
-      body { padding: 5px; }
-      h1 { font-size: 1.4em; }
-      #question { font-size: 1.3em; }
-    }
-    #result canvas { margin: 20px auto; }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Maths</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
-  <h1>🎮 Jeu de Multiplications</h1>
-  <!-- ÉCRAN D'ACCUEIL -->
-  <div id="start">
-    <p>Prénom : <input id="prenom" placeholder="Prénom"></p>
-    <p>Classe : <input id="classe" placeholder="Classe"></p>
-    <h3>Choisir un mode :</h3>
-    <button class="button" onclick="startGame('multiplication')">Classique</button>
-    <button class="button" onclick="startGame('chrono')">Chrono</button>
-    <button class="button" onclick="startGame('vrai_faux')">Vrai/Faux</button>
-    <button class="button" onclick="startGame('erreur')">Trouve l'Erreur</button>
-  </div>
+    <div class="container">
+        <h1>Jeu de Maths</h1>
+        <!-- Autres éléments de la page... -->
 
-  <!-- ÉCRAN DE JEU -->
-  <div id="game" style="display:none;">
-    <div id="question"></div>
-    <input id="answer" autofocus>
-    <br>
-    <button class="button" onclick="submitAnswer()">Valider</button>
-    <p id="progress" style="margin-top:16px; font-size:1.15em;"></p>
-    <p id="chronoLine" style="margin-top:6px;font-size:1em;"></p>
-  </div>
+        <!-- Pavé numérique contextuel -->
+        <div id="pave-numerique">
+            <!-- Les boutons seront insérés ici dynamiquement -->
+        </div>
+    </div>
 
-  <!-- ÉCRAN DE RÉSULTATS -->
-  <div id="result" style="display:none;">
-    <h2>Résultat</h2>
-    <p id="scoreText" style="font-size:1.2em;"></p>
-    <p id="advice" style="font-size:1.1em; margin-bottom:16px;"></p>
-    <canvas id="qr"></canvas>
-    <br>
-    <button class="button" onclick="restartGame()">Rejouer</button>
-  </div>
-</div>
+    <script>
+        // Exemples de modes : 'add', 'subtract', 'multiply', 'true-false'
+        let mode = 'add'; // À adapter selon le mode courant du jeu
 
-<script>
-let mode, prenom, classe;
-let currentQuestion = '';
-let correctAnswer;
-let questionCount = 0;
-let correctCount = 0;
-let mistakes = {};  // erreurs par table : {table_3: 2, ...}
-let startTime, endTime;
-let vraiFauxIsTrue; // Pour mode vrai/faux
-let erreurQuestion; // Pour mode "Trouve l'erreur"
+        function renderPaveNumerique() {
+            const pave = document.getElementById('pave-numerique');
+            pave.innerHTML = '';
+            if (mode !== 'true-false') {
+                // Pavé numérique classique
+                const paveHTML = `
+                    <div class="pave-classique">
+                        <button class="btn-num">1</button>
+                        <button class="btn-num">2</button>
+                        <button class="btn-num">3</button><br>
+                        <button class="btn-num">4</button>
+                        <button class="btn-num">5</button>
+                        <button class="btn-num">6</button><br>
+                        <button class="btn-num">7</button>
+                        <button class="btn-num">8</button>
+                        <button class="btn-num">9</button><br>
+                        <button class="btn-num">0</button>
+                        <button class="btn-clear">Effacer</button>
+                    </div>
+                `;
+                pave.innerHTML = paveHTML;
+            } else {
+                // Pavé vrai/faux
+                const vraiFauxHTML = `
+                    <div class="pave-vrai-faux">
+                        <button class="btn-true">Vrai</button>
+                        <button class="btn-false">Faux</button>
+                    </div>
+                `;
+                pave.innerHTML = vraiFauxHTML;
+            }
+        }
 
-function startGame(selectedMode) {
-  prenom = document.getElementById("prenom").value.trim();
-  classe = document.getElementById("classe").value.trim();
-  mode = selectedMode;
+        // Exemple d'utilisation : changer le mode et réafficher le pavé
+        function setMode(newMode) {
+            mode = newMode;
+            renderPaveNumerique();
+        }
 
-  if (!prenom || !classe) {
-    alert("Merci d’entrer un prénom et une classe.");
-    return;
-  }
-  questionCount = 0;
-  correctCount = 0;
-  mistakes = {};
-  document.getElementById("start").style.display = "none";
-  document.getElementById("result").style.display = "none";
-  document.getElementById("game").style.display = "block";
-  document.getElementById("chronoLine").textContent = "";
-  startTime = Date.now();
-  nextQuestion();
-}
-
-function nextQuestion() {
-  questionCount++;
-  if (mode === "chrono") {
-    // Chrono: 15 questions rapides
-    if (questionCount > 15) {
-      finishGame();
-      return;
-    }
-    document.getElementById("chronoLine").textContent = "Mode chronométré : Vise la rapidité !";
-  } else if (questionCount > 10) {
-    finishGame();
-    return;
-  } else {
-    if (mode === "vrai_faux" || mode === "erreur") {
-      // Vrai/Faux et Trouve l'Erreur : 12 questions
-      if (questionCount > 12) {
-        finishGame();
-        return;
-      }
-    }
-  }
-
-  let a = Math.floor(Math.random() * 9) + 1;
-  let b = Math.floor(Math.random() * 9) + 1;
-
-  if (mode === "multiplication" || mode === "chrono") {
-    currentQuestion = `${a} × ${b}`;
-    correctAnswer = a * b;
-    if (!mistakes[`table_${a}`]) mistakes[`table_${a}`] = 0;
-    if (!mistakes[`table_${b}`]) mistakes[`table_${b}`] = 0;
-    showQuestion(currentQuestion, "Réponds :"); // aide "Réponds :" ajoutée
-  }
-
-  if (mode === "vrai_faux") {
-    let correct = Math.random() < 0.5;
-    let value = correct ? a * b : (a * b + Math.floor(Math.random() * 5) + 1);
-    currentQuestion = `${a} × ${b} = ${value}`;
-    vraiFauxIsTrue = (value === a * b);
-    showQuestion(currentQuestion, "Vrai ou Faux ?");
-    document.getElementById("answer").placeholder = "vrai / faux";
-  }
-
-  if (mode === "erreur") {
-    // "Trouve l'erreur" : proposer une multiplication avec résultat faux ? ou bonne
-    let isWrong = Math.random() < 0.5;
-    let result = a * b;
-    if (isWrong) {
-      let offset = Math.floor(Math.random() * 3) + 1;
-      result += offset;
-    }
-    erreurQuestion = isWrong;
-    currentQuestion = `${a} × ${b} = ${result}`;
-    showQuestion(currentQuestion, "Juste ou Faux ?");
-    document.getElementById("answer").placeholder = "juste / faux";
-  }
-
-  let total = mode === "chrono" ? 15 : (mode === "vrai_faux" || mode === "erreur" ? 12 : 10);
-  document.getElementById("progress").textContent = `${questionCount}/${total}`;
-  document.getElementById("answer").value = "";
-  document.getElementById("answer").focus();
-}
-
-function showQuestion(text, prompt) {
-  document.getElementById("question").textContent = text + (prompt ? " (" + prompt + ")" : "");
-}
-
-function submitAnswer() {
-  let ans = document.getElementById("answer").value.trim();
-  let isRight = false;
-
-  if (mode === "multiplication" || mode === "chrono") {
-    if (parseInt(ans) === correctAnswer) {
-      correctCount++;
-      isRight = true;
-    } else {
-      let parts = currentQuestion.split("×");
-      let tA = parseInt(parts[0]);
-      let tB = parseInt(parts[1]);
-      if (!isNaN(tA)) mistakes[`table_${tA}`]++;
-      if (!isNaN(tB)) mistakes[`table_${tB}`]++;
-    }
-  }
-
-  if (mode === "vrai_faux") {
-    let val = ans.toLowerCase();
-    let userTrue = (val === "vrai" || val === "1" || val === "true");
-    if (userTrue === vraiFauxIsTrue) {
-      correctCount++;
-      isRight = true;
-    } else {
-      let parts = currentQuestion.split("×");
-      let tA = parseInt(parts[0]);
-      let tB = parseInt(parts[1]);
-      if (!isNaN(tA)) mistakes[`table_${tA}`]++;
-      if (!isNaN(tB)) mistakes[`table_${tB}`]++;
-    }
-  }
-
-  if (mode === "erreur") {
-    let val = ans.toLowerCase();
-    let userWrong = (val === "faux" || val === "false" || val === "0");
-    let userJust = (val === "juste" || val === "1" || val === "true");
-    if ((erreurQuestion && userWrong) || (!erreurQuestion && userJust)) {
-      correctCount++;
-      isRight = true;
-    } else {
-      let parts = currentQuestion.split("×");
-      let tA = parseInt(parts[0]);
-      let tB = parseInt(parts[1]);
-      if (!isNaN(tA)) mistakes[`table_${tA}`]++;
-      if (!isNaN(tB)) mistakes[`table_${tB}`]++;
-    }
-  }
-
-  nextQuestion();
-}
-
-function finishGame() {
-  document.getElementById("game").style.display = "none";
-  document.getElementById("result").style.display = "block";
-  endTime = Date.now();
-  let totalTime = Math.round((endTime - startTime) / 1000); // sec
-
-  // Analyse erreurs pour conseil
-  let worst = null, worstNb = 0;
-  let adviceList = [];
-  for (let table in mistakes) {
-    if (mistakes[table] > 0) {
-      adviceList.push(`Révise la ${table.replace("table_", "table de ")} (${mistakes[table]} erreur${mistakes[table]>1?"s":""})`);
-      if (mistakes[table] > worstNb) {
-        worst = table;
-        worstNb = mistakes[table];
-      }
-    }
-  }
-  let adviceMsg = adviceList.length ? adviceList.join(", ") : "Excellent travail !";
-
-  let totalQ = mode === "chrono" ? 15 : (mode === "vrai_faux" || mode === "erreur" ? 12 : 10);
-  let scoreStr = `Score : ${correctCount}/${totalQ}`;
-  scoreStr += ` | Temps : ${totalTime} sec`;
-
-  document.getElementById("scoreText").textContent = scoreStr;
-  document.getElementById("advice").textContent = adviceMsg;
-
-  // Format compatible ScanProf
-  let scanprofData = {
-    eleve: { prenom: prenom, classe: classe },
-    exercice: mode,
-    score: correctCount,
-    total_questions: totalQ,
-    temps_sec: totalTime,
-    erreurs: mistakes,
-    conseil: adviceMsg
-  };
-
-  new QRious({
-    element: document.getElementById("qr"),
-    size: 260,
-    value: JSON.stringify(scanprofData)
-  });
-}
-
-function restartGame() {
-  questionCount = 0;
-  correctCount = 0;
-  mistakes = {};
-  document.getElementById("result").style.display = "none";
-  document.getElementById("start").style.display = "block";
-  document.getElementById("answer").value = "";
-}
-// Pour valider avec Entrée
-document.getElementById("answer").addEventListener("keydown", function(evt) {
-  if (evt.key === "Enter") submitAnswer();
-});
-</script>
+        // Initialisation
+        renderPaveNumerique();
+    </script>
 </body>
 </html>
