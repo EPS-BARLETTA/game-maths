@@ -6,44 +6,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #222;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-      min-height: 100vh;
-      text-align: center;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      background: #333;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px #0007;
-      padding: 20px;
-    }
+    body { font-family: Arial, sans-serif; background: #222; color: #fff; margin: 0; padding: 20px; min-height: 100vh; text-align: center;}
+    .container { max-width: 400px; margin: 0 auto; background: #333; border-radius: 16px; box-shadow: 0 4px 16px #0007; padding: 20px; }
     h1 { font-size: 2em; margin: 8px 0 18px; }
-    button.button, .operation-btn, .level-btn, .mode-btn {
-      padding: 11px 22px;
-      margin: 6px;
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 1.07em;
-      cursor: pointer;
-      margin-top: 7px;
-      transition: background .22s;
-      outline: none;
-      box-shadow: 0 1px 4px #0005;
-    }
+    button.button, .operation-btn, .level-btn, .mode-btn, .questions-btn { padding: 11px 22px; margin: 6px; border: none; border-radius: 10px; color: #fff; font-size: 1.07em; cursor: pointer; margin-top: 7px; transition: background .22s; outline: none; box-shadow: 0 1px 4px #0005; }
     .operation-btn[data-op="multiply"] { background: #FF9800; }
     .operation-btn[data-op="add"]      { background: #2196F3; }
     .operation-btn[data-op="subtract"] { background: #8E24AA; }
     .operation-btn[data-op="divide"]   { background: #E53935; }
-    .op-selected[data-op="multiply"], .op-selected[data-op="add"], .op-selected[data-op="subtract"], .op-selected[data-op="divide"] {
-      border: 2px solid #fff; filter: brightness(1.2);
-    }
+    .op-selected[data-op="multiply"], .op-selected[data-op="add"], .op-selected[data-op="subtract"], .op-selected[data-op="divide"] { border: 2px solid #fff; filter: brightness(1.2);}
     .level-btn[data-level="1"] { background: #A5D6A7; color: #222; }
     .level-btn[data-level="2"] { background: #FFF176; color: #222; }
     .level-btn[data-level="3"] { background: #90A4AE; color: #fff; }
@@ -53,61 +24,51 @@
     .mode-btn[data-mode="vrai_faux"]      { background:#F06292; }
     .mode-btn[data-mode="erreur"]         { background:#795548; }
     .mode-selected { box-shadow:0 0 1px 3px #fff3; border:2px solid #fff; filter: brightness(1.09);}
-    input[type="text"] {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1.1em;
-      margin: 10px;
-      width: 70%;
-      background: #222;
-      color: #fff;
-      outline: none;
-      text-align: center;
-      margin-bottom: 18px;
-    }
-    #question {
-      font-size: 2em;
-      margin: 19px 0 10px;
-      min-height: 2.2em;
-    }
-    @media (max-width:600px) {
-      .container { max-width: 98%; }
-      body { padding: 7px; }
-      h1 { font-size: 1.35em; }
-      #question { font-size: 1.18em; }
-      #numpad button { font-size: 1.1em !important; width: 43px !important; height: 39px !important;}
-      #numpad .numpad-vrai, #numpad .numpad-faux { width: 48% !important; min-width:100px !important; }
-    }
+    .questions-btn { background: #222; color: #fff;}
+    .questions-selected { background: #00BCD4; color: #fff; border:2px solid #fff; }
+    input[type="text"] { padding: 10px; border-radius: 8px; border: none; font-size: 1.1em; margin: 10px; width: 70%; background: #222; color: #fff; outline: none; text-align: center; margin-bottom: 18px; }
+    #question { font-size: 2em; margin: 19px 0 10px; min-height: 2.2em;}
+    #btn-help { margin-top: 8px; margin-bottom: 10px; background: #757575; }
+    #helpbox { display:none; background:#263238; color:#fff; border-radius:10px; padding:18px; box-shadow: 0 4px 16px #0007; margin:18px 0;}
+    #close-help { background:#e53935; color:#fff; margin-top:7px;}
+    @media (max-width:600px) {.container { max-width: 98%; } body { padding: 7px; } h1 { font-size: 1.35em; } #question { font-size: 1.18em; } #numpad button { font-size: 1.1em !important; width: 43px !important; height: 39px !important;} #numpad .numpad-vrai, #numpad .numpad-faux { width: 48% !important; min-width:100px !important; }}
     #result canvas { margin: 20px auto; display: block; }
     .hidden { display: none !important; }
     #numpad { margin: 10px 0 10px 0; }
-    #numpad button {
-      width: 56px;
-      height: 52px;
-      font-size: 1.25em;
-      margin: 3px;
-      border-radius: 8px;
-      border: none;
-      background: #444;
-      color: #fff;
-      cursor: pointer;
-      transition: background .18s;
-      display: inline-block;
-      outline: none;
-      user-select: none;
-    }
+    #numpad button { width: 56px; height: 52px; font-size: 1.25em; margin: 3px; border-radius: 8px; border: none; background: #444; color: #fff; cursor: pointer; transition: background .18s; display: inline-block; outline: none; user-select: none;}
     #numpad button.numpad-eff { background: #aaa; color: #222; }
     #numpad button.numpad-ok  { background: #4CAF50; }
     #numpad .numpad-vrai { background: #6ac200; color: #fff; width: 48%; min-width:140px; height: 54px; font-size: 1.19em; margin:8px 1vw;}
     #numpad .numpad-faux { background: #e94444; color: #fff; width: 48%; min-width:140px; height: 54px; font-size: 1.19em; margin:8px 1vw;}
     #numpad button:active { background: #666; }
-    .op-choose-label { font-size: 1.07em; margin-top:18px; }
+    .op-choose-label { font-size: 1.07em; margin-top:18px;}
   </style>
 </head>
 <body>
 <div class="container">
   <h1>🎮 Défi Mathématiques</h1>
+  <button id="btn-help">AIDE / Mode d'emploi</button>
+  <div id="helpbox">
+    <strong>Comment utiliser l'application ?</strong><br><br>
+    <b>1. Choisis ton prénom et ta classe.</b><br>
+    <b>2. Sélectionne le type d'exercice :</b><br>
+    <span style="color:#FF9800;">Multiplication</span> (tables)<br>
+    <span style="color:#2196F3;">Addition</span> (somme)<br>
+    <span style="color:#8E24AA;">Soustraction</span> (calculer la différence)<br>
+    <span style="color:#E53935;">Division</span> (division posée, résultat entier)<br><br>
+    <b>3. Choisis ton niveau de difficulté :</b><br>
+    <span style="color:#A5D6A7;">Niveau 1</span> (1-9)<br>
+    <span style="color:#FFF176;">Niveau 2</span> (10-20)<br>
+    <span style="color:#90A4AE;">Niveau 3</span> (jusqu'à 99)<br><br>
+    <b>4. Sélectionne ton mode de jeu :</b><br>
+    <span style="color:#4CAF50;">Classique</span>, <span style="color:#00BCD4;">Chrono</span>, <span style="color:#F06292;">Vrai/Faux</span>, <span style="color:#795548;">Trouve l'Erreur</span><br><br>
+    <b>5. Choisis le nombre de questions :</b> (10 / 15 / 20 / 25 / 30 / 35 / 40)<br><br>
+    <b>6. Valide et commence : utilise le pavé numérique ou les boutons Vrai/Faux pour répondre selon le mode.</b><br><br>
+    <b>QR Code ScanProf :</b><br>
+    Le QR affiché résume ton score et où tu dois progresser (ex : "Addition N2 13/20, à réviser : Soustraction"). Donne-le à ton enseignant pour le scanner.
+    <br><br>
+    <button id="close-help">Fermer l'aide</button>
+  </div>
   <div id="start">
     <p>Prénom : <input id="prenom" type="text" autocomplete="off" maxlength="18" placeholder="Prénom"></p>
     <p>Classe : <input id="classe" type="text" autocomplete="off" maxlength="18" placeholder="Classe"></p>
@@ -126,6 +87,17 @@
       <button type="button" class="level-btn" data-level="3">Niveau 3</button>
     </div>
     <div id="level-chosen" style="margin:12px;font-size:1.12em;"></div>
+    <div class="op-choose-label">Nombre de questions :</div>
+    <div id="questions-choose">
+      <button type="button" class="questions-btn" data-q="10">10</button>
+      <button type="button" class="questions-btn" data-q="15">15</button>
+      <button type="button" class="questions-btn" data-q="20">20</button>
+      <button type="button" class="questions-btn" data-q="25">25</button>
+      <button type="button" class="questions-btn" data-q="30">30</button>
+      <button type="button" class="questions-btn" data-q="35">35</button>
+      <button type="button" class="questions-btn" data-q="40">40</button>
+    </div>
+    <div id="questions-chosen" style="margin:12px;font-size:1.12em;"></div>
     <h3>Choisir un mode :</h3>
     <div id="mode-choose" style="margin-bottom:12px;">
       <button type="button" class="mode-btn" data-mode="multiplication">Classique</button>
@@ -133,6 +105,7 @@
       <button type="button" class="mode-btn" data-mode="vrai_faux">Vrai/Faux</button>
       <button type="button" class="mode-btn" data-mode="erreur">Trouve l'Erreur</button>
     </div>
+    <button type="button" class="button" id="btn-play">Valider et jouer</button>
   </div>
   <form id="game" class="hidden" autocomplete="off" onsubmit="return false;">
     <div id="question"></div>
@@ -154,47 +127,36 @@
 </div>
 <script defer>
 let state = {
-  mode: null, operation:'multiply', level:1, prenom:'', classe:'',
+  mode: null, operation:'multiply', level:1, numQuestions:10, prenom:'', classe:'',
   questionCount: 0, correctCount: 0,
   currentQuestion: '', correctAnswer: null,
   mistakes: {},
   vraiFauxIsTrue: false, erreurQuestion: false,
   startTime: null, endTime: null
 };
-const operationColors = {
-  multiply: '#FF9800',
-  add: '#2196F3',
-  subtract: '#8E24AA',
-  divide: '#E53935'
-};
-const levelColors = {
-  1: '#A5D6A7',
-  2: '#FFF176',
-  3: '#90A4AE'
-};
-const modeColors = {
-  multiplication:'#4CAF50',
-  chrono:'#00BCD4',
-  vrai_faux:'#F06292',
-  erreur:'#795548'
-};
+const operationColors = { multiply: '#FF9800', add: '#2196F3', subtract: '#8E24AA', divide: '#E53935' };
+const levelColors = { 1: '#A5D6A7', 2: '#FFF176', 3: '#90A4AE' };
+const modeColors = { multiplication:'#4CAF50', chrono:'#00BCD4', vrai_faux:'#F06292', erreur:'#795548' };
 const $ = id => document.getElementById(id);
-// CHOIX OPÉRATION EN ACCUEIL
+
+document.getElementById('btn-help').onclick = () => { $('helpbox').style.display = 'block'; };
+document.getElementById('close-help').onclick = () => { $('helpbox').style.display = 'none'; };
+
+// Opération
 document.querySelectorAll('#op-choose .operation-btn').forEach(btn => {
   btn.onclick = () => {
     state.operation = btn.dataset.op;
     document.querySelectorAll('#op-choose .operation-btn').forEach(b=>b.classList.remove("op-selected"));
     btn.classList.add("op-selected");
-    let txt={
-      multiply:"Multiplication",add:"Addition",subtract:"Soustraction",divide:"Division"
-    };
+    let txt={ multiply:"Multiplication",add:"Addition",subtract:"Soustraction",divide:"Division" };
     $('op-chosen').textContent="Vous travaillerez : "+txt[state.operation];
     $('op-chosen').style.background = operationColors[state.operation];
     $('op-chosen').style.color = "#fff";
   };
 });
 document.querySelector('.operation-btn[data-op="multiply"]').click();
-// CHOIX DU NIVEAU
+
+// Niveau
 document.querySelectorAll('#level-choose .level-btn').forEach(btn => {
   btn.onclick = () => {
     state.level = parseInt(btn.dataset.level);
@@ -206,7 +168,19 @@ document.querySelectorAll('#level-choose .level-btn').forEach(btn => {
   };
 });
 document.querySelector('.level-btn[data-level="1"]').click();
-// CHOIX DU MODE
+
+// Nombre de questions
+document.querySelectorAll('#questions-choose .questions-btn').forEach(btn => {
+  btn.onclick = () => {
+    state.numQuestions = parseInt(btn.dataset.q);
+    document.querySelectorAll('#questions-choose .questions-btn').forEach(b=>b.classList.remove("questions-selected"));
+    btn.classList.add("questions-selected");
+    $('questions-chosen').textContent = "Tu répondras à "+btn.textContent+" questions";
+  };
+});
+document.querySelector('.questions-btn[data-q="10"]').click();
+
+// Mode
 document.querySelectorAll('#mode-choose .mode-btn').forEach(btn => {
   btn.onclick = () => {
     state.mode = btn.dataset.mode;
@@ -215,35 +189,22 @@ document.querySelectorAll('#mode-choose .mode-btn').forEach(btn => {
   };
 });
 document.querySelector('.mode-btn[data-mode="multiplication"]').click();
-document.querySelectorAll('#start .button').forEach(btn => {
-  btn.onclick = () => {
-    state.prenom = $('prenom').value.trim();
-    state.classe = $('classe').value.trim();
-    if (!state.prenom || !state.classe) {
-      alert("Merci d’entrer un prénom et une classe.");
-      return;
-    }
-    if (!state.operation) {
-      alert("Merci de choisir le type d'opération !");
-      return;
-    }
-    if (!state.level) {
-      alert("Merci de choisir un niveau !");
-      return;
-    }
-    if(!state.mode){
-      alert("Merci de choisir un mode !");
-      return;
-    }
-    Object.assign(state, {
-      questionCount:0, correctCount:0, mistakes:{},
-      startTime: Date.now()
-    });
-    hide($('start')); hide($('result')); show($('game'));
-    $('chronoLine').textContent = '';
-    nextQuestion();
-  };
-});
+
+$('btn-play').onclick = () => {
+  state.prenom = $('prenom').value.trim();
+  state.classe = $('classe').value.trim();
+  if (!state.prenom || !state.classe) { alert("Merci d’entrer un prénom et une classe."); return; }
+  if (!state.operation) { alert("Merci de choisir le type d'opération !"); return;}
+  if (!state.level) { alert("Merci de choisir un niveau !"); return;}
+  if(!state.mode){ alert("Merci de choisir un mode !"); return;}
+  Object.assign(state, {
+    questionCount:0, correctCount:0, mistakes:{}, startTime: Date.now()
+  });
+  hide($('start')); hide($('result')); show($('game'));
+  $('chronoLine').textContent = '';
+  nextQuestion();
+};
+
 function getRangeFromLevel(level) {
   if(level === 1) return [1,9];
   if(level === 2) return [10,20];
@@ -252,14 +213,11 @@ function getRangeFromLevel(level) {
 }
 function show(el) { el.classList.remove('hidden'); }
 function hide(el) { el.classList.add('hidden'); }
-function resetInput(inp) {
-  inp.value = '';
-  inp.placeholder = '';
-  inp.focus();
-}
+function resetInput(inp) { inp.value = ''; inp.placeholder = ''; inp.focus(); }
 function randInt(min,max) { return Math.floor(Math.random()*(max-min+1))+min; }
+
 function nextQuestion() {
-  let total = getTotalQuestions(state.mode);
+  let total = state.numQuestions;
   state.questionCount++;
   if (state.questionCount > total) return finishGame();
 
@@ -275,6 +233,7 @@ function nextQuestion() {
   state.currentQuestion = quest;
   state.correctAnswer = rep;
   state.mistakes[`op_${op}`] ??= 0;
+
   if(state.mode==="multiplication"||state.mode==="chrono"){
     showQuestion(quest,"Réponds :",operationColors[op]);
     $('answer').placeholder="";
@@ -319,30 +278,17 @@ function createContextualPad() {
   if(state.mode === "vrai_faux") {
     let b1 = document.createElement("button");
     b1.type = "button"; b1.textContent = "Vrai"; b1.className = "numpad-vrai";
-    b1.onclick = function() {
-      $("answer").value = "vrai";
-      submitAnswer();
-    };
+    b1.onclick = function() { $("answer").value = "vrai"; submitAnswer(); };
     let b2 = document.createElement("button");
     b2.type = "button"; b2.textContent = "Faux"; b2.className = "numpad-faux";
-    b2.onclick = function() {
-      $("answer").value = "faux";
-      submitAnswer();
-    };
-    pad.appendChild(b1);
-    pad.appendChild(b2);
+    b2.onclick = function() { $("answer").value = "faux"; submitAnswer(); };
+    pad.appendChild(b1); pad.appendChild(b2);
   } else {
-    const digits = [
-      [1,2,3],
-      [4,5,6],
-      [7,8,9],
-      ['Eff',0,'OK']
-    ];
+    const digits = [[1,2,3],[4,5,6],[7,8,9],['Eff',0,'OK']];
     digits.forEach(row => {
       row.forEach(val => {
         const b = document.createElement("button");
-        b.type = "button";
-        b.textContent = val;
+        b.type = "button"; b.textContent = val;
         if(val==='Eff') b.className = "numpad-eff";
         if(val==='OK')  b.className = "numpad-ok";
         b.onclick = () => handleNumpad(val);
@@ -354,29 +300,13 @@ function createContextualPad() {
 }
 function handleNumpad(val) {
   const input = document.getElementById("answer");
-  if(typeof val === "number") {
-    input.value += val;
-    input.focus();
-  }
-  else if(val === "Eff") {
-    input.value = input.value.slice(0, -1);
-    input.focus();
-  }
-  else if(val==='OK') {
-    submitAnswer();
-  }
+  if(typeof val === "number") { input.value += val; input.focus(); }
+  else if(val === "Eff") { input.value = input.value.slice(0, -1); input.focus(); }
+  else if(val==='OK') { submitAnswer(); }
 }
 function showQuestion(text,prompt,color) {
   $('question').textContent = text + (prompt ? ' ('+prompt+')' : '');
   $('question').style.color = color || '#fff';
-}
-function getTotalQuestions(mode) {
-  switch(mode) {
-    case 'chrono': return 15;
-    case 'vrai_faux':
-    case 'erreur': return 12;
-    default: return 10;
-  }
 }
 $('game').onsubmit = submitAnswer;
 $('answer').onkeydown = e => { if(e.key==="Enter") submitAnswer(); };
@@ -407,40 +337,31 @@ function submitAnswer(e) {
   if(result) state.correctCount++;
   nextQuestion();
 }
-function registerMistake(opType) {
-  state.mistakes[`op_${opType}`]++;
-}
+function registerMistake(opType) { state.mistakes[`op_${opType}`]++; }
 function finishGame() {
   hide($('game')); show($('result'));
   state.endTime = Date.now();
-  let totalTime = Math.round((state.endTime - state.startTime) / 1000);
-  let totalQ = getTotalQuestions(state.mode);
-  let mistakes = state.mistakes;
-  let adviceArr = [];
-  for(let op in mistakes){
-    if(mistakes[op]>0) {
-      let opfr = {multiply:"Multiplication",add:"Addition",subtract:"Soustraction",divide:"Division"};
-      adviceArr.push(`Révise les ${opfr[op.replace('op_','')]} (${mistakes[op]} erreur${mistakes[op]>1?"s":""})`);
+  let totalQ = state.numQuestions;
+  let opfr = {multiply:"Multiplication",add:"Addition",subtract:"Soustraction",divide:"Division"};
+  let conseilArr = [];
+  for(let op in state.mistakes){
+    if(state.mistakes[op]>0) {
+      conseilArr.push(opfr[op.replace('op_','')]);
     }
   }
-  let adviceMsg = adviceArr.length?adviceArr.join(", "):"Excellent travail !";
-  $('scoreText').textContent = `Score : ${state.correctCount}/${totalQ}` + ` | Temps : ${totalTime} sec`;
-  $('advice').textContent = adviceMsg;
-  let scanprofData = {
-    eleve: { prenom: state.prenom, classe: state.classe },
-    operation: state.operation,
-    niveau: state.level,
-    exercice: state.mode,
-    score: state.correctCount,
-    total_questions: totalQ,
-    temps_sec: totalTime,
-    erreurs: state.mistakes,
-    conseil: adviceMsg
+  let conseilMsg = conseilArr.length ? "À réviser : " + conseilArr.join(', ') : "Excellent !";
+  $('scoreText').textContent = `Score : ${opfr[state.operation]} N${state.level} ${state.correctCount}/${totalQ}`;
+  $('advice').textContent = conseilMsg;
+
+  // QR : seulement résultat et conseils
+  let qrData = {
+    resultat: `${opfr[state.operation]} N${state.level} ${state.correctCount}/${totalQ}`,
+    conseil: conseilMsg
   };
   new QRious({
     element: $('qr'),
     size: 260,
-    value: JSON.stringify(scanprofData)
+    value: JSON.stringify(qrData)
   });
 }
 $('restart').onclick = () => {
