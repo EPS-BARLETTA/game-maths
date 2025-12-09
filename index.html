@@ -1,68 +1,351 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Maths</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Jeu de Multiplications - ScanProf</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #222;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      text-align: center;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #333;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px #0007;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 { font-size: 2em; margin: 8px 0 18px; }
+    button.button {
+      padding: 11px 22px;
+      margin: 6px;
+      background: #4CAF50;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.07em;
+      cursor: pointer;
+      margin-top: 7px;
+      transition: background .2s;
+    }
+    button.button:hover { background: #388e3c; }
+    input[type="text"]{
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1.1em;
+      margin: 10px;
+      width: 70%;
+      background: #222;
+      color: #fff;
+      outline: none;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    #question {
+      font-size: 2em;
+      margin: 19px 0 10px;
+      min-height: 2.2em;
+    }
+    @media (max-width:600px) {
+      .container { max-width: 98%; }
+      body { padding: 7px; }
+      h1 { font-size: 1.35em; }
+      #question { font-size: 1.18em; }
+      #numpad button { font-size: 1.1em !important; width: 43px !important; height: 39px !important;}
+      #numpad .numpad-vrai, #numpad .numpad-faux { width: 48% !important; min-width:100px !important; }
+    }
+    #result canvas { margin: 20px auto; display: block; }
+    .hidden { display: none !important; }
+    #numpad { margin: 10px 0 10px 0; }
+    #numpad button {
+      width: 56px;
+      height: 52px;
+      font-size: 1.25em;
+      margin: 3px;
+      border-radius: 8px;
+      border: none;
+      background: #444;
+      color: #fff;
+      cursor: pointer;
+      transition: background .18s;
+      display: inline-block;
+      outline: none;
+      user-select: none;
+    }
+    #numpad button.numpad-eff { background: #aaa; color: #222; }
+    #numpad button.numpad-ok  { background: #4CAF50; }
+    #numpad .numpad-vrai { background: #6ac200; color: #fff; width: 48%; min-width:140px; height: 54px; font-size: 1.19em; margin:8px 1vw;}
+    #numpad .numpad-faux { background: #e94444; color: #fff; width: 48%; min-width:140px; height: 54px; font-size: 1.19em; margin:8px 1vw;}
+    #numpad button:active { background: #666; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Jeu de Maths</h1>
-        <!-- Autres éléments de la page... -->
+<div class="container">
+  <h1>🎮 Jeu de Multiplications</h1>
 
-        <!-- Pavé numérique contextuel -->
-        <div id="pave-numerique">
-            <!-- Les boutons seront insérés ici dynamiquement -->
-        </div>
-    </div>
+  <div id="start">
+    <p>Prénom : <input id="prenom" type="text" autocomplete="off" maxlength="18" placeholder="Prénom"></p>
+    <p>Classe : <input id="classe" type="text" autocomplete="off" maxlength="18" placeholder="Classe"></p>
+    <h3>Choisir un mode :</h3>
+    <button type="button" class="button" data-mode="multiplication">Classique</button>
+    <button type="button" class="button" data-mode="chrono">Chrono</button>
+    <button type="button" class="button" data-mode="vrai_faux">Vrai/Faux</button>
+    <button type="button" class="button" data-mode="erreur">Trouve l'Erreur</button>
+  </div>
 
-    <script>
-        // Exemples de modes : 'add', 'subtract', 'multiply', 'true-false'
-        let mode = 'add'; // À adapter selon le mode courant du jeu
+  <form id="game" class="hidden" autocomplete="off" onsubmit="return false;">
+    <div id="question"></div>
+    <input id="answer" type="text" autocomplete="off" maxlength="10" inputmode="numeric" pattern="[0-9]*">
+    <br>
+    <!-- PAVÉ NUMÉRIQUE ou BOUTONS VRAI/FAUX ICI -->
+    <div id="numpad"></div>
+    <button type="submit" class="button">Valider</button>
+    <p id="progress" style="margin-top:12px; font-size:1.07em;"></p>
+    <p id="chronoLine" style="font-size:1em;"></p>
+  </form>
 
-        function renderPaveNumerique() {
-            const pave = document.getElementById('pave-numerique');
-            pave.innerHTML = '';
-            if (mode !== 'true-false') {
-                // Pavé numérique classique
-                const paveHTML = `
-                    <div class="pave-classique">
-                        <button class="btn-num">1</button>
-                        <button class="btn-num">2</button>
-                        <button class="btn-num">3</button><br>
-                        <button class="btn-num">4</button>
-                        <button class="btn-num">5</button>
-                        <button class="btn-num">6</button><br>
-                        <button class="btn-num">7</button>
-                        <button class="btn-num">8</button>
-                        <button class="btn-num">9</button><br>
-                        <button class="btn-num">0</button>
-                        <button class="btn-clear">Effacer</button>
-                    </div>
-                `;
-                pave.innerHTML = paveHTML;
-            } else {
-                // Pavé vrai/faux
-                const vraiFauxHTML = `
-                    <div class="pave-vrai-faux">
-                        <button class="btn-true">Vrai</button>
-                        <button class="btn-false">Faux</button>
-                    </div>
-                `;
-                pave.innerHTML = vraiFauxHTML;
-            }
-        }
+  <div id="result" class="hidden">
+    <h2>Résultat</h2>
+    <p id="scoreText" style="font-size:1.15em;"></p>
+    <p id="advice" style="font-size:1.1em; margin-bottom:13px;"></p>
+    <canvas id="qr"></canvas>
+    <br>
+    <button type="button" id="restart" class="button">Rejouer</button>
+  </div>
+</div>
+<script defer>
+let state = {
+  mode: null, prenom: '', classe: '',
+  questionCount: 0, correctCount: 0,
+  currentQuestion: '', correctAnswer: null,
+  mistakes: {},
+  vraiFauxIsTrue: false, erreurQuestion: false,
+  startTime: null, endTime: null
+};
 
-        // Exemple d'utilisation : changer le mode et réafficher le pavé
-        function setMode(newMode) {
-            mode = newMode;
-            renderPaveNumerique();
-        }
+const $ = id => document.getElementById(id);
 
-        // Initialisation
-        renderPaveNumerique();
-    </script>
+function show(el) { el.classList.remove('hidden'); }
+function hide(el) { el.classList.add('hidden'); }
+function resetInput(inp) {
+  inp.value = '';
+  inp.placeholder = '';
+  inp.focus();
+}
+
+document.querySelectorAll('#start .button').forEach(btn => {
+  btn.onclick = () => {
+    state.prenom = $('prenom').value.trim();
+    state.classe = $('classe').value.trim();
+    state.mode = btn.dataset.mode;
+    if (!state.prenom || !state.classe) {
+      alert("Merci d’entrer un prénom et une classe.");
+      return;
+    }
+    Object.assign(state, {
+      questionCount:0, correctCount:0, mistakes:{},
+      startTime: Date.now()
+    });
+    hide($('start')); hide($('result')); show($('game'));
+    $('chronoLine').textContent = '';
+    nextQuestion();
+  };
+});
+
+function randInt(min,max) { return Math.floor(Math.random()*(max-min+1))+min; }
+
+function nextQuestion() {
+  let total = getTotalQuestions(state.mode);
+  state.questionCount++;
+
+  if (state.questionCount > total) return finishGame();
+
+  let a = randInt(1,9), b = randInt(1,9);
+  state.mistakes[`table_${a}`] ??= 0;
+  state.mistakes[`table_${b}`] ??= 0;
+
+  if (state.mode === 'multiplication' || state.mode === 'chrono') {
+    state.currentQuestion = `${a} × ${b}`;
+    state.correctAnswer = a * b;
+    showQuestion(state.currentQuestion, "Réponds :");
+    $('answer').placeholder = '';
+    if(state.mode === 'chrono') $('chronoLine').textContent = "Mode chronométré : Vise la rapidité !";
+    else $('chronoLine').textContent = '';
+  } else if (state.mode === 'vrai_faux') {
+    let correct = Math.random() < .5;
+    let value = correct ? a*b : a*b + randInt(1,5);
+    state.currentQuestion = `${a} × ${b} = ${value}`;
+    state.vraiFauxIsTrue = (value === a*b);
+    showQuestion(state.currentQuestion, "Vrai ou Faux ?");
+    $('answer').placeholder = "vrai / faux";
+  } else if (state.mode === 'erreur') {
+    let isWrong = Math.random() < .5, result = a*b;
+    if (isWrong) result += randInt(1,3);
+    state.erreurQuestion = isWrong;
+    state.currentQuestion = `${a} × ${b} = ${result}`;
+    showQuestion(state.currentQuestion, "Juste ou Faux ?");
+    $('answer').placeholder = "juste / faux";
+  }
+
+  $('progress').textContent = `${state.questionCount}/${total}`;
+  resetInput($('answer'));
+  createContextualPad();
+}
+
+// Affiche le pavé numérique sauf en mode vrai_faux, où on met deux boutons Vrai/Faux
+function createContextualPad() {
+  const pad = document.getElementById("numpad");
+  pad.innerHTML = "";
+  if(state.mode === "vrai_faux") {
+    let b1 = document.createElement("button");
+    b1.type = "button"; b1.textContent = "Vrai"; b1.className = "numpad-vrai";
+    b1.onclick = function() {
+      $("answer").value = "vrai";
+      submitAnswer();
+    };
+    let b2 = document.createElement("button");
+    b2.type = "button"; b2.textContent = "Faux"; b2.className = "numpad-faux";
+    b2.onclick = function() {
+      $("answer").value = "faux";
+      submitAnswer();
+    };
+    pad.appendChild(b1);
+    pad.appendChild(b2);
+  } else {
+    const digits = [
+      [1,2,3],
+      [4,5,6],
+      [7,8,9],
+      ['Eff',0,'OK']
+    ];
+    digits.forEach(row => {
+      row.forEach(val => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = val;
+        if(val==='Eff') b.className = "numpad-eff";
+        if(val==='OK')  b.className = "numpad-ok";
+        b.onclick = () => handleNumpad(val);
+        pad.appendChild(b);
+      });
+      pad.appendChild(document.createElement("br"));
+    });
+  }
+}
+function handleNumpad(val) {
+  const input = document.getElementById("answer");
+  if(typeof val === "number") {
+    input.value += val;
+    input.focus();
+  }
+  else if(val === "Eff") {
+    input.value = input.value.slice(0, -1);
+    input.focus();
+  }
+  else if(val==='OK') {
+    submitAnswer();
+  }
+}
+
+function showQuestion(text,prompt) {
+  $('question').textContent = text + (prompt ? ' ('+prompt+')' : '');
+}
+
+function getTotalQuestions(mode) {
+  switch(mode) {
+    case 'chrono': return 15;
+    case 'vrai_faux':
+    case 'erreur': return 12;
+    default: return 10;
+  }
+}
+
+$('game').onsubmit = submitAnswer;
+$('answer').onkeydown = e => { if(e.key==="Enter") submitAnswer(); };
+
+function submitAnswer(e) {
+  if(e) e.preventDefault && e.preventDefault();
+  let ans = $('answer').value.trim().toLowerCase();
+  let result = false;
+  switch(state.mode) {
+    case 'multiplication':
+    case 'chrono':
+      if(parseInt(ans) === state.correctAnswer) result = true;
+      else registerMistake();
+      break;
+    case 'vrai_faux':
+      let userTrue = /^(vrai|1|true)$/i.test(ans);
+      result = userTrue === state.vraiFauxIsTrue;
+      if(!result) registerMistake();
+      break;
+    case 'erreur':
+      let userWrong = /^(faux|false|0)$/i.test(ans), userJust = /^(juste|1|true)$/i.test(ans);
+      result = (state.erreurQuestion && userWrong) || (!state.erreurQuestion && userJust);
+      if(!result) registerMistake();
+  }
+  if(result) state.correctCount++;
+  nextQuestion();
+}
+
+function registerMistake() {
+  let t = state.currentQuestion.match(/^(\d+) × (\d+)/);
+  if (!t) return;
+  state.mistakes[`table_${t[1]}`]++;
+  state.mistakes[`table_${t[2]}`]++;
+}
+
+function finishGame() {
+  hide($('game')); show($('result'));
+  state.endTime = Date.now();
+
+  let totalTime = Math.round((state.endTime - state.startTime) / 1000);
+  let totalQ = getTotalQuestions(state.mode);
+
+  let mistakes = state.mistakes;
+  let adviceArr = [];
+  let worstNb=0;
+  for(let t in mistakes){
+    if(mistakes[t]>0) {
+      adviceArr.push(`Révise la ${t.replace("table_","table de ")} (${mistakes[t]>1?mistakes[t]+' erreurs':mistakes[t]+' erreur'})`);
+      if(mistakes[t]>worstNb) worstNb=mistakes[t];
+    }
+  }
+  let adviceMsg = adviceArr.length?adviceArr.join(", "):"Excellent travail !";
+  $('scoreText').textContent = `Score : ${state.correctCount}/${totalQ}` + ` | Temps : ${totalTime} sec`;
+  $('advice').textContent = adviceMsg;
+
+  let scanprofData = {
+    eleve: { prenom: state.prenom, classe: state.classe },
+    exercice: state.mode,
+    score: state.correctCount,
+    total_questions: totalQ,
+    temps_sec: totalTime,
+    erreurs: state.mistakes,
+    conseil: adviceMsg
+  };
+  new QRious({
+    element: $('qr'),
+    size: 260,
+    value: JSON.stringify(scanprofData)
+  });
+}
+
+$('restart').onclick = () => {
+  hide($('result')); show($('start'));
+  $('prenom').focus();
+};
+
+window.onload = () => {$('prenom').focus();};
+</script>
 </body>
 </html>
