@@ -10,7 +10,6 @@
     body { font-family: Arial, sans-serif; background: #222; color: #fff; margin: 0; padding: 20px; min-height: 100vh; text-align: center;}
     .container { max-width: 400px; margin: 0 auto; background: #333; border-radius: 16px; box-shadow: 0 4px 16px #0007; padding: 20px; }
 
-    /* PAGE DE GARDE CENTRÉE */
     #welcome {
       display: flex;
       flex-direction: column;
@@ -52,7 +51,6 @@
       box-shadow: 0 1px 4px #0005;
     }
 
-    /* BOUTON VALIDER ET JOUER → BLANC + TEXTE NOIR */
     .button {
       background: #ffffff !important;
       color: #000 !important;
@@ -61,18 +59,15 @@
     }
     .button:hover { background: #f2f2f2 !important; }
 
-    /* Couleurs boutons */
     .operation-btn[data-op="multiply"] { background: #FF9800; }
     .operation-btn[data-op="add"]      { background: #2196F3; }
     .operation-btn[data-op="subtract"] { background: #8E24AA; }
     .operation-btn[data-op="divide"]   { background: #E53935; }
-
     .op-selected { border: 2px solid #fff; filter: brightness(1.2); }
 
     .level-btn[data-level="1"] { background: #A5D6A7; color: #222; }
     .level-btn[data-level="2"] { background: #FFF176; color: #222; }
     .level-btn[data-level="3"] { background: #90A4AE; }
-
     .level-selected { border:2px solid #fff; filter: brightness(1.1); }
 
     .mode-btn[data-mode="multiplication"] { background:#4CAF50; }
@@ -127,18 +122,16 @@
 
 <div class="container">
 
-  <!-- PAGE DE GARDE -->
   <div id="welcome">
     <h1>🎮 Défi Mathématiques</h1>
     <button id="startApp">Démarrer</button>
   </div>
 
-  <!-- MENU PRINCIPAL -->
   <div id="start" class="hidden">
     <p>Prénom : <input id="prenom" type="text" maxlength="18"></p>
     <p>Classe : <input id="classe" type="text" maxlength="18"></p>
 
-    <div class="op-choose-label">Type d'opération :</div>
+    <div>Type d'opération :</div>
     <div id="op-choose">
       <button class="operation-btn" data-op="multiply">× Multiplication</button>
       <button class="operation-btn" data-op="add">+ Addition</button>
@@ -146,14 +139,14 @@
       <button class="operation-btn" data-op="divide">÷ Division</button>
     </div>
 
-    <div class="op-choose-label">Niveau :</div>
+    <div>Niveau :</div>
     <div id="level-choose">
       <button class="level-btn" data-level="1">Niveau 1</button>
       <button class="level-btn" data-level="2">Niveau 2</button>
       <button class="level-btn" data-level="3">Niveau 3</button>
     </div>
 
-    <div class="op-choose-label">Nombre de questions :</div>
+    <div>Nombre de questions :</div>
     <div id="questions-choose">
       <button class="questions-btn" data-q="10">10</button>
       <button class="questions-btn" data-q="15">15</button>
@@ -171,17 +164,14 @@
     <button id="btn-play" class="button">Valider et jouer</button>
   </div>
 
-  <!-- JEU -->
   <form id="game" class="hidden" onsubmit="return false;">
     <div id="question"></div>
     <input id="answer" type="text" maxlength="10" autocomplete="off">
     <div id="numpad"></div>
-    <button class="button" type="submit">Valider</button>
     <p id="progress"></p>
     <p id="chronoLine"></p>
   </form>
 
-  <!-- RESULTATS -->
   <div id="result" class="hidden">
     <h2>Résultat</h2>
     <p id="scoreText"></p>
@@ -194,9 +184,6 @@
 
 <script>
 
-// --------------------------------------------------
-// ÉTAT GLOBAL
-// --------------------------------------------------
 let state = {
   mode: null,
   operation: 'multiply', 
@@ -217,17 +204,11 @@ let state = {
 
 const $ = id => document.getElementById(id);
 
-// --------------------------------------------------
-// PAGE DE GARDE
-// --------------------------------------------------
 $('startApp').onclick = () => {
   $('welcome').classList.add('hidden');
   $('start').classList.remove('hidden');
 };
 
-// --------------------------------------------------
-// SÉLECTIONS
-// --------------------------------------------------
 document.querySelectorAll('#op-choose .operation-btn').forEach(btn=>{
   btn.onclick=()=>{
     state.operation=btn.dataset.op;
@@ -264,9 +245,6 @@ document.querySelectorAll('#mode-choose .mode-btn').forEach(btn=>{
 });
 document.querySelector('.mode-btn[data-mode="multiplication"]').click();
 
-// --------------------------------------------------
-// LANCER LE JEU
-// --------------------------------------------------
 $('btn-play').onclick = ()=>{
 
   state.prenom = $('prenom').value.trim();
@@ -283,7 +261,6 @@ $('btn-play').onclick = ()=>{
   $('result').classList.add('hidden');
   $('game').classList.remove('hidden');
 
-  // MODE CHRONO → démarrer
   if(state.mode === "chrono"){
     state.chronoStart = Date.now();
     $('chronoLine').textContent = "⏱ 0 sec";
@@ -295,9 +272,6 @@ $('btn-play').onclick = ()=>{
   nextQuestion();
 };
 
-// --------------------------------------------------
-// CHRONO VISUEL
-// --------------------------------------------------
 let chronoInterval = null;
 
 function startChronoDisplay(){
@@ -313,9 +287,6 @@ function stopChrono(){
   state.chronoTime = Math.floor((Date.now() - state.chronoStart)/1000);
 }
 
-// --------------------------------------------------
-// UTILITAIRES
-// --------------------------------------------------
 function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
 function getRangeFromLevel(level){
@@ -324,9 +295,6 @@ function getRangeFromLevel(level){
   return [10,99];
 }
 
-// --------------------------------------------------
-// NUMPAD
-// --------------------------------------------------
 function createContextualPad(){
   const pad = $('numpad');
   pad.innerHTML = "";
@@ -340,6 +308,7 @@ function createContextualPad(){
   }
 
   const digits=[[1,2,3],[4,5,6],[7,8,9],['Eff',0,'OK']];
+
   digits.forEach(row=>{
     row.forEach(val=>{
       const b=document.createElement("button");
@@ -372,9 +341,6 @@ function handleNumpad(v){
   else if(v==="OK"){ submitAnswer(); }
 }
 
-// --------------------------------------------------
-// GÉNÉRATION DES QUESTIONS
-// --------------------------------------------------
 function nextQuestion(){
   state.questionCount++;
   if(state.questionCount > state.numQuestions){
@@ -419,9 +385,6 @@ function nextQuestion(){
   createContextualPad();
 }
 
-// --------------------------------------------------
-// RÉPONSES
-// --------------------------------------------------
 function submitAnswer(){
   let ans = $('answer').value.trim().toLowerCase();
   let ok=false;
@@ -444,9 +407,6 @@ function submitAnswer(){
   nextQuestion();
 }
 
-// --------------------------------------------------
-// FIN DE PARTIE
-// --------------------------------------------------
 function finishGame(){
 
   if(state.mode==="chrono"){
@@ -471,7 +431,9 @@ function finishGame(){
   }
 
   let qrData = {
-    resultat: `${state.operation} N${state.level} ${state.correctCount}/${state.numQuestions}`,
+    prenom: state.prenom,
+    classe: state.classe,
+    infos: `${state.operation} N${state.level} ${state.correctCount}/${state.numQuestions}`,
     temps: state.chronoTime ?? null
   };
 
