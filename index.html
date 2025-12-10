@@ -51,324 +51,346 @@
   <div id="helpbox">
     <strong>Comment utiliser l'application ?</strong><br><br>
     <b>1. Choisis ton prénom et ta classe.</b><br>
-    <b>2. Sélectionne le type d'exercice :</b><br>
-    <span style="color:#FF9800;">Multiplication</span> (tables)<br>
-    <span style="color:#2196F3;">Addition</span> (somme)<br>
-    <span style="color:#8E24AA;">Soustraction</span> (calculer la différence)<br>
-    <span style="color:#E53935;">Division</span> (division posée, résultat entier)<br><br>
-    <b>3. Choisis ton niveau de difficulté :</b><br>
-    <span style="color:#A5D6A7;">Niveau 1</span> (1-9)<br>
-    <span style="color:#FFF176;">Niveau 2</span> (10-20)<br>
-    <span style="color:#90A4AE;">Niveau 3</span> (jusqu'à 99)<br><br>
-    <b>4. Sélectionne ton mode de jeu :</b><br>
-    <span style="color:#4CAF50;">Classique</span>, <span style="color:#00BCD4;">Chrono</span>, <span style="color:#F06292;">Vrai/Faux</span>, <span style="color:#795548;">Trouve l'Erreur</span><br><br>
-    <b>5. Choisis le nombre de questions :</b> (10 / 15 / 20 / 25 / 30 / 35 / 40)<br><br>
-    <b>6. Valide et commence : utilise le pavé numérique ou les boutons Vrai/Faux pour répondre selon le mode.</b><br><br>
-    <b>QR Code ScanProf :</b><br>
-    Le QR affiché résume ton score et où tu dois progresser (ex : "Addition N2 13/20, à réviser : Soustraction"). Donne-le à ton enseignant pour le scanner.
-    <br><br>
+    <b>2. Sélectionne le type d'exercice.</b><br>
+    <b>3. Choisis un niveau.</b><br>
+    <b>4. Sélectionne le mode.</b><br>
+    <b>5. Réponds avec le pavé numérique ou les boutons adaptés.</b><br><br>
     <button id="close-help">Fermer l'aide</button>
   </div>
+
   <div id="start">
-    <p>Prénom : <input id="prenom" type="text" autocomplete="off" maxlength="18" placeholder="Prénom"></p>
-    <p>Classe : <input id="classe" type="text" autocomplete="off" maxlength="18" placeholder="Classe"></p>
+    <p>Prénom : <input id="prenom" type="text" maxlength="18"></p>
+    <p>Classe : <input id="classe" type="text" maxlength="18"></p>
+
     <div class="op-choose-label">Type d'opération :</div>
     <div id="op-choose">
-      <button type="button" class="operation-btn" data-op="multiply">× Multiplication</button>
-      <button type="button" class="operation-btn" data-op="add">+ Addition</button>
-      <button type="button" class="operation-btn" data-op="subtract">− Soustraction</button>
-      <button type="button" class="operation-btn" data-op="divide">÷ Division</button>
+      <button class="operation-btn" data-op="multiply">× Multiplication</button>
+      <button class="operation-btn" data-op="add">+ Addition</button>
+      <button class="operation-btn" data-op="subtract">− Soustraction</button>
+      <button class="operation-btn" data-op="divide">÷ Division</button>
     </div>
-    <div id="op-chosen" style="margin:12px;font-size:1.12em;"></div>
-    <div class="op-choose-label">Niveau de difficulté :</div>
+    <div id="op-chosen"></div>
+
+    <div class="op-choose-label">Niveau :</div>
     <div id="level-choose">
-      <button type="button" class="level-btn" data-level="1">Niveau 1</button>
-      <button type="button" class="level-btn" data-level="2">Niveau 2</button>
-      <button type="button" class="level-btn" data-level="3">Niveau 3</button>
+      <button class="level-btn" data-level="1">Niveau 1</button>
+      <button class="level-btn" data-level="2">Niveau 2</button>
+      <button class="level-btn" data-level="3">Niveau 3</button>
     </div>
-    <div id="level-chosen" style="margin:12px;font-size:1.12em;"></div>
+    <div id="level-chosen"></div>
+
     <div class="op-choose-label">Nombre de questions :</div>
     <div id="questions-choose">
-      <button type="button" class="questions-btn" data-q="10">10</button>
-      <button type="button" class="questions-btn" data-q="15">15</button>
-      <button type="button" class="questions-btn" data-q="20">20</button>
-      <button type="button" class="questions-btn" data-q="25">25</button>
-      <button type="button" class="questions-btn" data-q="30">30</button>
-      <button type="button" class="questions-btn" data-q="35">35</button>
-      <button type="button" class="questions-btn" data-q="40">40</button>
+      <button class="questions-btn" data-q="10">10</button>
+      <button class="questions-btn" data-q="15">15</button>
+      <button class="questions-btn" data-q="20">20</button>
+      <button class="questions-btn" data-q="25">25</button>
+      <button class="questions-btn" data-q="30">30</button>
+      <button class="questions-btn" data-q="35">35</button>
+      <button class="questions-btn" data-q="40">40</button>
     </div>
-    <div id="questions-chosen" style="margin:12px;font-size:1.12em;"></div>
+    <div id="questions-chosen"></div>
+
     <h3>Choisir un mode :</h3>
-    <div id="mode-choose" style="margin-bottom:12px;">
-      <button type="button" class="mode-btn" data-mode="multiplication">Classique</button>
-      <button type="button" class="mode-btn" data-mode="chrono">Chrono</button>
-      <button type="button" class="mode-btn" data-mode="vrai_faux">Vrai/Faux</button>
-      <button type="button" class="mode-btn" data-mode="erreur">Trouve l'Erreur</button>
+    <div id="mode-choose">
+      <button class="mode-btn" data-mode="multiplication">Classique</button>
+      <button class="mode-btn" data-mode="chrono">Chrono</button>
+      <button class="mode-btn" data-mode="vrai_faux">Vrai/Faux</button>
+      <button class="mode-btn" data-mode="erreur">Trouve l'Erreur</button>
     </div>
-    <button type="button" class="button" id="btn-play">Valider et jouer</button>
+
+    <button id="btn-play" class="button">Valider et jouer</button>
   </div>
-  <form id="game" class="hidden" autocomplete="off" onsubmit="return false;">
+
+  <form id="game" class="hidden" onsubmit="return false;">
     <div id="question"></div>
-    <input id="answer" type="text" autocomplete="off" maxlength="10" inputmode="numeric" pattern="[0-9]*">
-    <br>
+    <input id="answer" type="text" maxlength="10" autocomplete="off">
     <div id="numpad"></div>
-    <button type="submit" class="button">Valider</button>
-    <p id="progress" style="margin-top:12px; font-size:1.07em;"></p>
-    <p id="chronoLine" style="font-size:1em;"></p>
+    <button class="button" type="submit">Valider</button>
+    <p id="progress"></p>
+    <p id="chronoLine"></p>
   </form>
+
   <div id="result" class="hidden">
     <h2>Résultat</h2>
-    <p id="scoreText" style="font-size:1.15em;"></p>
-    <p id="advice" style="font-size:1.1em; margin-bottom:13px;"></p>
+    <p id="scoreText"></p>
+    <p id="advice"></p>
     <canvas id="qr"></canvas>
-    <br>
-    <button type="button" id="restart" class="button">Rejouer</button>
+    <button id="restart" class="button">Rejouer</button>
   </div>
 </div>
-<script defer>
+
+<script>
+
+// --------------------------------------------------
+// ÉTAT GLOBAL
+// --------------------------------------------------
 let state = {
-  mode: null, operation:'multiply', level:1, numQuestions:10, prenom:'', classe:'',
+  mode: null, operation:'multiply', level:1, numQuestions:10,
+  prenom:'', classe:'',
   questionCount: 0, correctCount: 0,
   currentQuestion: '', correctAnswer: null,
   mistakes: {},
-  vraiFauxIsTrue: false, erreurQuestion: false,
-  startTime: null, endTime: null
+  vraiFauxIsTrue: false, erreurQuestion: false
 };
-const operationColors = { multiply: '#FF9800', add: '#2196F3', subtract: '#8E24AA', divide: '#E53935' };
-const levelColors = { 1: '#A5D6A7', 2: '#FFF176', 3: '#90A4AE' };
-const modeColors = { multiplication:'#4CAF50', chrono:'#00BCD4', vrai_faux:'#F06292', erreur:'#795548' };
+
 const $ = id => document.getElementById(id);
 
-document.getElementById('btn-help').onclick = () => { $('helpbox').style.display = 'block'; };
-document.getElementById('close-help').onclick = () => { $('helpbox').style.display = 'none'; };
+// --------------------------------------------------
+// AIDE
+// --------------------------------------------------
+$('btn-help').onclick = () => $('helpbox').style.display = 'block';
+$('close-help').onclick = () => $('helpbox').style.display = 'none';
 
-// Opération
-document.querySelectorAll('#op-choose .operation-btn').forEach(btn => {
-  btn.onclick = () => {
-    state.operation = btn.dataset.op;
-    document.querySelectorAll('#op-choose .operation-btn').forEach(b=>b.classList.remove("op-selected"));
-    btn.classList.add("op-selected");
-    let txt={ multiply:"Multiplication",add:"Addition",subtract:"Soustraction",divide:"Division" };
-    $('op-chosen').textContent="Vous travaillerez : "+txt[state.operation];
-    $('op-chosen').style.background = operationColors[state.operation];
-    $('op-chosen').style.color = "#fff";
+// --------------------------------------------------
+// SÉLECTIONS DU MENU
+// --------------------------------------------------
+document.querySelectorAll('#op-choose .operation-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    state.operation=btn.dataset.op;
+    document.querySelectorAll('.operation-btn').forEach(b=>b.classList.remove('op-selected'));
+    btn.classList.add('op-selected');
   };
 });
 document.querySelector('.operation-btn[data-op="multiply"]').click();
 
-// Niveau
-document.querySelectorAll('#level-choose .level-btn').forEach(btn => {
-  btn.onclick = () => {
-    state.level = parseInt(btn.dataset.level);
-    document.querySelectorAll('#level-choose .level-btn').forEach(b=>b.classList.remove("level-selected"));
-    btn.classList.add("level-selected");
-    $('level-chosen').textContent = "Niveau choisi : " + btn.textContent;
-    $('level-chosen').style.background = levelColors[state.level];
-    $('level-chosen').style.color = state.level==2 ? "#222" : "#fff";
+document.querySelectorAll('#level-choose .level-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    state.level=parseInt(btn.dataset.level);
+    document.querySelectorAll('.level-btn').forEach(b=>b.classList.remove('level-selected'));
+    btn.classList.add('level-selected');
   };
 });
 document.querySelector('.level-btn[data-level="1"]').click();
 
-// Nombre de questions
-document.querySelectorAll('#questions-choose .questions-btn').forEach(btn => {
-  btn.onclick = () => {
-    state.numQuestions = parseInt(btn.dataset.q);
-    document.querySelectorAll('#questions-choose .questions-btn').forEach(b=>b.classList.remove("questions-selected"));
-    btn.classList.add("questions-selected");
-    $('questions-chosen').textContent = "Tu répondras à "+btn.textContent+" questions";
+document.querySelectorAll('#questions-choose .questions-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    state.numQuestions=parseInt(btn.dataset.q);
+    document.querySelectorAll('.questions-btn').forEach(b=>b.classList.remove('questions-selected'));
+    btn.classList.add('questions-selected');
   };
 });
 document.querySelector('.questions-btn[data-q="10"]').click();
 
-// Mode
-document.querySelectorAll('#mode-choose .mode-btn').forEach(btn => {
-  btn.onclick = () => {
-    state.mode = btn.dataset.mode;
-    document.querySelectorAll('#mode-choose .mode-btn').forEach(b=>b.classList.remove("mode-selected"));
-    btn.classList.add("mode-selected");
+document.querySelectorAll('#mode-choose .mode-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    state.mode=btn.dataset.mode;
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('mode-selected'));
+    btn.classList.add('mode-selected');
   };
 });
 document.querySelector('.mode-btn[data-mode="multiplication"]').click();
 
-$('btn-play').onclick = () => {
+// --------------------------------------------------
+// LANCER LE JEU
+// --------------------------------------------------
+$('btn-play').onclick = ()=>{
   state.prenom = $('prenom').value.trim();
   state.classe = $('classe').value.trim();
-  if (!state.prenom || !state.classe) { alert("Merci d’entrer un prénom et une classe."); return; }
-  if (!state.operation) { alert("Merci de choisir le type d'opération !"); return;}
-  if (!state.level) { alert("Merci de choisir un niveau !"); return;}
-  if(!state.mode){ alert("Merci de choisir un mode !"); return;}
-  Object.assign(state, {
-    questionCount:0, correctCount:0, mistakes:{}, startTime: Date.now()
-  });
-  hide($('start')); hide($('result')); show($('game'));
-  $('chronoLine').textContent = '';
+
+  if(!state.prenom || !state.classe){
+    alert("Merci d’entrer un prénom et une classe.");
+    return;
+  }
+
+  state.questionCount=0;
+  state.correctCount=0;
+  state.mistakes={};
+
+  $('start').classList.add('hidden');
+  $('result').classList.add('hidden');
+  $('game').classList.remove('hidden');
+
   nextQuestion();
 };
 
-function getRangeFromLevel(level) {
-  if(level === 1) return [1,9];
-  if(level === 2) return [10,20];
-  if(level === 3) return [10,99];
-  return [1,9];
+// --------------------------------------------------
+// UTILITAIRES
+// --------------------------------------------------
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+function getRangeFromLevel(level){
+  if(level===1) return [1,9];
+  if(level===2) return [10,20];
+  return [10,99];
 }
-function show(el) { el.classList.remove('hidden'); }
-function hide(el) { el.classList.add('hidden'); }
-function resetInput(inp) { inp.value = ''; inp.placeholder = ''; inp.focus(); }
-function randInt(min,max) { return Math.floor(Math.random()*(max-min+1))+min; }
 
-function nextQuestion() {
-  let total = state.numQuestions;
+// --------------------------------------------------
+// AFFICHAGE DU PAVÉ NUMÉRIQUE / JUSTE / FAUX
+// --------------------------------------------------
+function createContextualPad(){
+  const pad = $('numpad');
+  pad.innerHTML = "";
+
+  // Mode VRAI / FAUX
+  if(state.mode === "vrai_faux"){
+    createTrueFalseButtons("vrai","faux");
+    return;
+  }
+
+  // Mode TROUVE L’ERREUR
+  if(state.mode === "erreur"){
+    createTrueFalseButtons("juste","faux");
+    return;
+  }
+
+  // Sinon → pavé numérique classique
+  const digits=[[1,2,3],[4,5,6],[7,8,9],['Eff',0,'OK']];
+  digits.forEach(row=>{
+    row.forEach(val=>{
+      const b=document.createElement("button");
+      b.type="button";
+      b.textContent=val;
+
+      if(val==='Eff') b.className="numpad-eff";
+      if(val==='OK')  b.className="numpad-ok";
+
+      b.onclick=()=>handleNumpad(val);
+      pad.appendChild(b);
+    });
+    pad.appendChild(document.createElement("br"));
+  });
+}
+
+// Boutons Vrai/Faux ou Juste/Faux
+function createTrueFalseButtons(txt1,txt2){
+  const pad = $('numpad');
+
+  let b1=document.createElement("button");
+  b1.type="button";
+  b1.textContent=txt1;
+  b1.className="numpad-vrai";
+  b1.onclick=()=>{ $('answer').value=txt1; submitAnswer(); };
+
+  let b2=document.createElement("button");
+  b2.type="button";
+  b2.textContent=txt2;
+  b2.className="numpad-faux";
+  b2.onclick=()=>{ $('answer').value=txt2; submitAnswer(); };
+
+  pad.appendChild(b1);
+  pad.appendChild(b2);
+}
+
+function handleNumpad(v){
+  const input=$('answer');
+  if(typeof v==='number'){ input.value+=v; }
+  else if(v==="Eff"){ input.value=input.value.slice(0,-1); }
+  else if(v==="OK"){ submitAnswer(); }
+}
+
+// --------------------------------------------------
+// GÉNÉRATION DES QUESTIONS
+// --------------------------------------------------
+function nextQuestion(){
   state.questionCount++;
-  if (state.questionCount > total) return finishGame();
+  if(state.questionCount > state.numQuestions){ return finishGame(); }
 
-  let op = state.operation;
-  let [min,max] = getRangeFromLevel(state.level||1);
-  let a = randInt(min,max), b = randInt(min,max), quest='', rep=null;
-  switch(op){
-    case 'add':      quest = `${a} + ${b}`; rep = a+b; break;
-    case 'subtract': if(b>a) [a,b]=[b,a]; quest = `${a} − ${b}`; rep = a-b; break;
-    case 'multiply': quest = `${a} × ${b}`; rep = a*b; break;
-    case 'divide':   rep = a; let prod=a*b; quest = `${prod} ÷ ${b}`; break;
+  let [min,max]=getRangeFromLevel(state.level);
+  let a=randInt(min,max), b=randInt(min,max);
+  let rep=null, quest='';
+
+  switch(state.operation){
+    case "add": quest=`${a} + ${b}`; rep=a+b; break;
+    case "subtract": if(b>a)[a,b]=[b,a]; quest=`${a} − ${b}`; rep=a-b; break;
+    case "multiply": quest=`${a} × ${b}`; rep=a*b; break;
+    case "divide": rep=a; quest=`${a*b} ÷ ${b}`; break;
   }
-  state.currentQuestion = quest;
+
   state.correctAnswer = rep;
-  state.mistakes[`op_${op}`] ??= 0;
 
-  if(state.mode==="multiplication"||state.mode==="chrono"){
-    showQuestion(quest,"Réponds :",operationColors[op]);
-    $('answer').placeholder="";
-    $('chronoLine').style.background = modeColors[state.mode];
-    $('chronoLine').style.color = "#fff";
-    if(state.mode==="chrono") $('chronoLine').textContent="Mode chronométré : Vise la rapidité !";
-    else $('chronoLine').textContent="";
-  }
-  else if(state.mode==="vrai_faux"){
-    let corr = Math.random() < .5;
-    let value = rep;
-    if(!corr){
-      let fake = rep + (op==="subtract"?randInt(-2,2):randInt(1,5));
-      if(op==="subtract" && fake===rep) fake += 1;
-      if(op==="divide" && fake<=0) fake = rep + randInt(1,3);
-      value = fake;
+  // Mode vrai/faux → valeur potentiellement fausse
+  if(state.mode==="vrai_faux"){
+    let correct = Math.random() < 0.5;
+    let shown = rep;
+
+    if(!correct){
+      shown = rep + randInt(1,5);
     }
-    state.currentQuestion=quest+" = "+value;
-    state.vraiFauxIsTrue = (value===rep);
-    showQuestion(state.currentQuestion,"Vrai ou Faux ?",operationColors[op]);
-    $('answer').placeholder="vrai / faux";
+
+    state.vraiFauxIsTrue = (shown === rep);
+    state.currentQuestion = quest+" = "+shown;
   }
-  else if(state.mode==='erreur'){
-    let isWrong = Math.random() < .5;
-    let value=rep;
+
+  // Mode trouve l'erreur → "juste ou faux"
+  else if(state.mode==="erreur"){
+    let isWrong = Math.random() < 0.5;
+    let shown = rep;
+
     if(isWrong){
-      value+= (op==="subtract"?randInt(-2,2):randInt(1,3));
-      if(op==="divide" && value<=0) value=rep+randInt(1,3);
+      shown = rep + randInt(1,3);
     }
+
     state.erreurQuestion = isWrong;
-    state.currentQuestion = quest+" = "+value;
-    showQuestion(state.currentQuestion,"Juste ou Faux ?",operationColors[op]);
-    $('answer').placeholder="juste / faux";
+    state.currentQuestion = quest+" = "+shown;
   }
-  $('progress').textContent = `${state.questionCount}/${total}`;
-  resetInput($('answer'));
+
+  else {
+    state.currentQuestion = quest;
+  }
+
+  $('question').textContent = state.currentQuestion;
+  $('progress').textContent = `${state.questionCount}/${state.numQuestions}`;
+  $('answer').value="";
+  $('answer').focus();
+
   createContextualPad();
 }
-function createContextualPad() {
-  const pad = document.getElementById("numpad");
-  pad.innerHTML = "";
-  if(state.mode === "vrai_faux") {
-    let b1 = document.createElement("button");
-    b1.type = "button"; b1.textContent = "Vrai"; b1.className = "numpad-vrai";
-    b1.onclick = function() { $("answer").value = "vrai"; submitAnswer(); };
-    let b2 = document.createElement("button");
-    b2.type = "button"; b2.textContent = "Faux"; b2.className = "numpad-faux";
-    b2.onclick = function() { $("answer").value = "faux"; submitAnswer(); };
-    pad.appendChild(b1); pad.appendChild(b2);
-  } else {
-    const digits = [[1,2,3],[4,5,6],[7,8,9],['Eff',0,'OK']];
-    digits.forEach(row => {
-      row.forEach(val => {
-        const b = document.createElement("button");
-        b.type = "button"; b.textContent = val;
-        if(val==='Eff') b.className = "numpad-eff";
-        if(val==='OK')  b.className = "numpad-ok";
-        b.onclick = () => handleNumpad(val);
-        pad.appendChild(b);
-      });
-      pad.appendChild(document.createElement("br"));
-    });
+
+// --------------------------------------------------
+// VALIDATION DES RÉPONSES
+// --------------------------------------------------
+function submitAnswer(){
+  let ans = $('answer').value.trim().toLowerCase();
+  let ok=false;
+
+  if(state.mode==="multiplication" || state.mode==="chrono" || state.mode==="classique"){
+    ok = (parseInt(ans) === state.correctAnswer);
   }
-}
-function handleNumpad(val) {
-  const input = document.getElementById("answer");
-  if(typeof val === "number") { input.value += val; input.focus(); }
-  else if(val === "Eff") { input.value = input.value.slice(0, -1); input.focus(); }
-  else if(val==='OK') { submitAnswer(); }
-}
-function showQuestion(text,prompt,color) {
-  $('question').textContent = text + (prompt ? ' ('+prompt+')' : '');
-  $('question').style.color = color || '#fff';
-}
-$('game').onsubmit = submitAnswer;
-$('answer').onkeydown = e => { if(e.key==="Enter") submitAnswer(); };
-function submitAnswer(e) {
-  if(e) e.preventDefault && e.preventDefault();
-  let ans = $('answer').value.trim().toLowerCase(), op = state.operation;
-  let result = false;
-  if(state.mode==='multiplication'||state.mode==='chrono'){
-    if(op==='divide'){
-      if(parseInt(ans) == state.correctAnswer) result=true;
-      else registerMistake(op);
-    }
-    else {
-      if(parseInt(ans) === state.correctAnswer) result=true;
-      else registerMistake(op);
-    }
+
+  else if(state.mode==="vrai_faux"){
+    let userTrue = /^(vrai|true|1)$/i.test(ans);
+    ok = (userTrue === state.vraiFauxIsTrue);
   }
-  else if(state.mode==='vrai_faux'){
-    let userTrue = /^(vrai|1|true)$/i.test(ans);
-    result = userTrue === state.vraiFauxIsTrue;
-    if(!result) registerMistake(op);
+
+  else if(state.mode==="erreur"){
+    let userJuste = /^(juste|true|1)$/i.test(ans);
+    let userFaux  = /^(faux|false|0)$/i.test(ans);
+
+    ok = (state.erreurQuestion && userFaux) || (!state.erreurQuestion && userJuste);
   }
-  else if(state.mode==='erreur'){
-    let userWrong = /^(faux|false|0)$/i.test(ans), userJust = /^(juste|1|true)$/i.test(ans);
-    result = (state.erreurQuestion && userWrong) || (!state.erreurQuestion && userJust);
-    if(!result) registerMistake(op);
-  }
-  if(result) state.correctCount++;
+
+  if(ok) state.correctCount++;
+
   nextQuestion();
 }
-function registerMistake(opType) { state.mistakes[`op_${opType}`]++; }
-function finishGame() {
-  hide($('game')); show($('result'));
-  state.endTime = Date.now();
-  let totalQ = state.numQuestions;
-  let opfr = {multiply:"Multiplication",add:"Addition",subtract:"Soustraction",divide:"Division"};
-  let conseilArr = [];
-  for(let op in state.mistakes){
-    if(state.mistakes[op]>0) {
-      conseilArr.push(opfr[op.replace('op_','')]);
-    }
-  }
-  let conseilMsg = conseilArr.length ? "À réviser : " + conseilArr.join(', ') : "Excellent !";
-  $('scoreText').textContent = `Score : ${opfr[state.operation]} N${state.level} ${state.correctCount}/${totalQ}`;
-  $('advice').textContent = conseilMsg;
 
-  // QR : seulement résultat et conseils
+// --------------------------------------------------
+// FIN DE PARTIE
+// --------------------------------------------------
+function finishGame(){
+  $('game').classList.add('hidden');
+  $('result').classList.remove('hidden');
+
+  $('scoreText').textContent = `${state.correctCount}/${state.numQuestions}`;
+
   let qrData = {
-    resultat: `${opfr[state.operation]} N${state.level} ${state.correctCount}/${totalQ}`,
-    conseil: conseilMsg
+    resultat: `${state.operation} N${state.level} ${state.correctCount}/${state.numQuestions}`
   };
+
   new QRious({
     element: $('qr'),
     size: 260,
     value: JSON.stringify(qrData)
   });
 }
-$('restart').onclick = () => {
-  hide($('result')); show($('start'));
-  $('prenom').focus();
+
+$('restart').onclick = ()=>{
+  $('result').classList.add('hidden');
+  $('start').classList.remove('hidden');
 };
-window.onload = () => {$('prenom').focus();};
+
 </script>
+
 </body>
 </html>
