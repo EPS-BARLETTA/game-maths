@@ -5,60 +5,129 @@
   <title>Défi Mathématiques - ScanProf</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <style>
     body { font-family: Arial, sans-serif; background: #222; color: #fff; margin: 0; padding: 20px; min-height: 100vh; text-align: center;}
     .container { max-width: 400px; margin: 0 auto; background: #333; border-radius: 16px; box-shadow: 0 4px 16px #0007; padding: 20px; }
+
+    /* PAGE DE GARDE */
+    #welcome { margin-top: 40px; }
+    #welcome h1 { font-size: 2.2em; }
+    #startApp { 
+      padding: 14px 28px; 
+      font-size: 1.2em; 
+      background: #fff; 
+      color: #000; 
+      border-radius: 12px; 
+      border: none; 
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #startApp:hover { background: #f2f2f2; }
+
     h1 { font-size: 2em; margin: 8px 0 18px; }
-    button.button, .operation-btn, .level-btn, .mode-btn, .questions-btn { padding: 11px 22px; margin: 6px; border: none; border-radius: 10px; color: #fff; font-size: 1.07em; cursor: pointer; margin-top: 7px; transition: background .22s; outline: none; box-shadow: 0 1px 4px #0005; }
+
+    button.button, 
+    .operation-btn, 
+    .level-btn, 
+    .mode-btn, 
+    .questions-btn { 
+      padding: 11px 22px; 
+      margin: 6px; 
+      border: none; 
+      border-radius: 10px; 
+      color: #fff; 
+      font-size: 1.07em; 
+      cursor: pointer; 
+      margin-top: 7px; 
+      transition: background .22s; 
+      outline: none; 
+      box-shadow: 0 1px 4px #0005;
+    }
+
+    /* BOUTON VALIDER ET JOUER → BLANC + TEXTE NOIR */
+    .button {
+      background: #ffffff !important;
+      color: #000 !important;
+      font-weight: bold;
+      border: 2px solid #00000033;
+    }
+    .button:hover { background: #f2f2f2 !important; }
+
+    /* Couleurs boutons */
     .operation-btn[data-op="multiply"] { background: #FF9800; }
     .operation-btn[data-op="add"]      { background: #2196F3; }
     .operation-btn[data-op="subtract"] { background: #8E24AA; }
     .operation-btn[data-op="divide"]   { background: #E53935; }
-    .op-selected[data-op="multiply"], .op-selected[data-op="add"], .op-selected[data-op="subtract"], .op-selected[data-op="divide"] { border: 2px solid #fff; filter: brightness(1.2);}
+
+    .op-selected { border: 2px solid #fff; filter: brightness(1.2); }
+
     .level-btn[data-level="1"] { background: #A5D6A7; color: #222; }
     .level-btn[data-level="2"] { background: #FFF176; color: #222; }
-    .level-btn[data-level="3"] { background: #90A4AE; color: #fff; }
-    .level-selected { box-shadow: 0 0 1px 3px #fff3; border:2px solid #fff; filter: brightness(1.09);}
+    .level-btn[data-level="3"] { background: #90A4AE; }
+
+    .level-selected { border:2px solid #fff; filter: brightness(1.1); }
+
     .mode-btn[data-mode="multiplication"] { background:#4CAF50; }
     .mode-btn[data-mode="chrono"]         { background:#00BCD4; }
     .mode-btn[data-mode="vrai_faux"]      { background:#F06292; }
     .mode-btn[data-mode="erreur"]         { background:#795548; }
-    .mode-selected { box-shadow:0 0 1px 3px #fff3; border:2px solid #fff; filter: brightness(1.09);}
-    .questions-btn { background: #222; color: #fff;}
-    .questions-selected { background: #00BCD4; color: #fff; border:2px solid #fff; }
-    input[type="text"] { padding: 10px; border-radius: 8px; border: none; font-size: 1.1em; margin: 10px; width: 70%; background: #222; color: #fff; outline: none; text-align: center; margin-bottom: 18px; }
-    #question { font-size: 2em; margin: 19px 0 10px; min-height: 2.2em;}
-    #btn-help { margin-top: 8px; margin-bottom: 10px; background: #757575; }
-    #helpbox { display:none; background:#263238; color:#fff; border-radius:10px; padding:18px; box-shadow: 0 4px 16px #0007; margin:18px 0;}
-    #close-help { background:#e53935; color:#fff; margin-top:7px;}
-    @media (max-width:600px) {.container { max-width: 98%; } body { padding: 7px; } h1 { font-size: 1.35em; } #question { font-size: 1.18em; } #numpad button { font-size: 1.1em !important; width: 43px !important; height: 39px !important;} #numpad .numpad-vrai, #numpad .numpad-faux { width: 48% !important; min-width:100px !important; }}
-    #result canvas { margin: 20px auto; display: block; }
+    .mode-selected { border:2px solid #fff; filter: brightness(1.1); }
+
+    .questions-btn { background: #222; }
+    .questions-selected { background:#00BCD4; border:2px solid #fff; }
+
+    input[type="text"] {
+      padding: 10px; 
+      border-radius: 8px; 
+      border: none; 
+      font-size: 1.1em; 
+      margin: 10px; 
+      width: 70%; 
+      background: #222; 
+      color: #fff; 
+      text-align: center;
+    }
+
+    #question { font-size: 2em; margin: 20px 0; min-height: 2.2em; }
+
+    #numpad button {
+      width: 56px; 
+      height: 52px; 
+      font-size: 1.25em; 
+      margin: 3px; 
+      border-radius: 8px; 
+      border: none; 
+      background: #444; 
+      color: #fff; 
+      cursor: pointer;
+    }
+
+    #numpad .numpad-eff { background: #aaa; color: #222; }
+    #numpad .numpad-ok  { background: #4CAF50; }
+
+    #numpad .numpad-vrai { background: #6ac200; width: 48%; height: 54px; }
+    #numpad .numpad-faux { background: #e94444; width: 48%; height: 54px; }
+
     .hidden { display: none !important; }
-    #numpad { margin: 10px 0 10px 0; }
-    #numpad button { width: 56px; height: 52px; font-size: 1.25em; margin: 3px; border-radius: 8px; border: none; background: #444; color: #fff; cursor: pointer; transition: background .18s; display: inline-block; outline: none; user-select: none;}
-    #numpad button.numpad-eff { background: #aaa; color: #222; }
-    #numpad button.numpad-ok  { background: #4CAF50; }
-    #numpad .numpad-vrai { background: #6ac200; color: #fff; width: 48%; min-width:140px; height: 54px; font-size: 1.19em; margin:8px 1vw;}
-    #numpad .numpad-faux { background: #e94444; color: #fff; width: 48%; min-width:140px; height: 54px; font-size: 1.19em; margin:8px 1vw;}
-    #numpad button:active { background: #666; }
-    .op-choose-label { font-size: 1.07em; margin-top:18px;}
+
+    #result canvas { margin: 20px auto; display: block; }
+
   </style>
 </head>
+
 <body>
+
 <div class="container">
-  <h1>🎮 Défi Mathématiques</h1>
-  <button id="btn-help">AIDE / Mode d'emploi</button>
-  <div id="helpbox">
-    <strong>Comment utiliser l'application ?</strong><br><br>
-    <b>1. Choisis ton prénom et ta classe.</b><br>
-    <b>2. Sélectionne le type d'exercice.</b><br>
-    <b>3. Choisis un niveau.</b><br>
-    <b>4. Sélectionne le mode.</b><br>
-    <b>5. Réponds avec le pavé numérique ou les boutons adaptés.</b><br><br>
-    <button id="close-help">Fermer l'aide</button>
+
+  <!-- PAGE DE GARDE -->
+  <div id="welcome">
+    <h1>🎮 Défi Mathématiques</h1>
+    <button id="startApp">Démarrer</button>
   </div>
 
-  <div id="start">
+  <!-- MENU PRINCIPAL -->
+  <div id="start" class="hidden">
     <p>Prénom : <input id="prenom" type="text" maxlength="18"></p>
     <p>Classe : <input id="classe" type="text" maxlength="18"></p>
 
@@ -69,7 +138,6 @@
       <button class="operation-btn" data-op="subtract">− Soustraction</button>
       <button class="operation-btn" data-op="divide">÷ Division</button>
     </div>
-    <div id="op-chosen"></div>
 
     <div class="op-choose-label">Niveau :</div>
     <div id="level-choose">
@@ -77,31 +145,26 @@
       <button class="level-btn" data-level="2">Niveau 2</button>
       <button class="level-btn" data-level="3">Niveau 3</button>
     </div>
-    <div id="level-chosen"></div>
 
     <div class="op-choose-label">Nombre de questions :</div>
     <div id="questions-choose">
       <button class="questions-btn" data-q="10">10</button>
       <button class="questions-btn" data-q="15">15</button>
       <button class="questions-btn" data-q="20">20</button>
-      <button class="questions-btn" data-q="25">25</button>
-      <button class="questions-btn" data-q="30">30</button>
-      <button class="questions-btn" data-q="35">35</button>
-      <button class="questions-btn" data-q="40">40</button>
     </div>
-    <div id="questions-chosen"></div>
 
     <h3>Choisir un mode :</h3>
     <div id="mode-choose">
       <button class="mode-btn" data-mode="multiplication">Classique</button>
       <button class="mode-btn" data-mode="chrono">Chrono</button>
       <button class="mode-btn" data-mode="vrai_faux">Vrai/Faux</button>
-      <button class="mode-btn" data-mode="erreur">Trouve l'Erreur</button>
+      <button class="mode-btn" data-mode="erreur">Erreur</button>
     </div>
 
     <button id="btn-play" class="button">Valider et jouer</button>
   </div>
 
+  <!-- JEU -->
   <form id="game" class="hidden" onsubmit="return false;">
     <div id="question"></div>
     <input id="answer" type="text" maxlength="10" autocomplete="off">
@@ -111,13 +174,15 @@
     <p id="chronoLine"></p>
   </form>
 
+  <!-- RESULTATS -->
   <div id="result" class="hidden">
     <h2>Résultat</h2>
     <p id="scoreText"></p>
-    <p id="advice"></p>
+    <p id="bestTimeText"></p>
     <canvas id="qr"></canvas>
     <button id="restart" class="button">Rejouer</button>
   </div>
+
 </div>
 
 <script>
@@ -126,24 +191,35 @@
 // ÉTAT GLOBAL
 // --------------------------------------------------
 let state = {
-  mode: null, operation:'multiply', level:1, numQuestions:10,
-  prenom:'', classe:'',
-  questionCount: 0, correctCount: 0,
-  currentQuestion: '', correctAnswer: null,
-  mistakes: {},
-  vraiFauxIsTrue: false, erreurQuestion: false
+  mode: null,
+  operation: 'multiply', 
+  level: 1, 
+  numQuestions: 10,
+  prenom: '', 
+  classe: '',
+  questionCount: 0, 
+  correctCount: 0,
+  currentQuestion: '', 
+  correctAnswer: null,
+  chronoStart: 0,
+  chronoTime: 0,
+  bestTime: localStorage.getItem("bestTime") ?? null,
+  vraiFauxIsTrue: false,
+  erreurQuestion: false
 };
 
 const $ = id => document.getElementById(id);
 
 // --------------------------------------------------
-// AIDE
+// PAGE DE GARDE
 // --------------------------------------------------
-$('btn-help').onclick = () => $('helpbox').style.display = 'block';
-$('close-help').onclick = () => $('helpbox').style.display = 'none';
+$('startApp').onclick = () => {
+  $('welcome').classList.add('hidden');
+  $('start').classList.remove('hidden');
+};
 
 // --------------------------------------------------
-// SÉLECTIONS DU MENU
+// SÉLECTIONS
 // --------------------------------------------------
 document.querySelectorAll('#op-choose .operation-btn').forEach(btn=>{
   btn.onclick=()=>{
@@ -185,24 +261,50 @@ document.querySelector('.mode-btn[data-mode="multiplication"]').click();
 // LANCER LE JEU
 // --------------------------------------------------
 $('btn-play').onclick = ()=>{
+
   state.prenom = $('prenom').value.trim();
   state.classe = $('classe').value.trim();
-
   if(!state.prenom || !state.classe){
     alert("Merci d’entrer un prénom et une classe.");
     return;
   }
 
-  state.questionCount=0;
-  state.correctCount=0;
-  state.mistakes={};
+  state.questionCount = 0;
+  state.correctCount = 0;
 
   $('start').classList.add('hidden');
   $('result').classList.add('hidden');
   $('game').classList.remove('hidden');
 
+  // MODE CHRONO → démarrer
+  if(state.mode === "chrono"){
+    state.chronoStart = Date.now();
+    $('chronoLine').textContent = "⏱ 0 sec";
+    startChronoDisplay();
+  } else {
+    $('chronoLine').textContent = "";
+  }
+
   nextQuestion();
 };
+
+// --------------------------------------------------
+// CHRONO VISUEL
+// --------------------------------------------------
+let chronoInterval = null;
+
+function startChronoDisplay(){
+  if(chronoInterval) clearInterval(chronoInterval);
+  chronoInterval = setInterval(()=>{
+    let sec = Math.floor((Date.now() - state.chronoStart)/1000);
+    $('chronoLine').textContent = "⏱ " + sec + " sec";
+  }, 200);
+}
+
+function stopChrono(){
+  if(chronoInterval) clearInterval(chronoInterval);
+  state.chronoTime = Math.floor((Date.now() - state.chronoStart)/1000);
+}
 
 // --------------------------------------------------
 // UTILITAIRES
@@ -216,35 +318,28 @@ function getRangeFromLevel(level){
 }
 
 // --------------------------------------------------
-// AFFICHAGE DU PAVÉ NUMÉRIQUE / JUSTE / FAUX
+// NUMPAD
 // --------------------------------------------------
 function createContextualPad(){
   const pad = $('numpad');
   pad.innerHTML = "";
 
-  // Mode VRAI / FAUX
   if(state.mode === "vrai_faux"){
-    createTrueFalseButtons("vrai","faux");
-    return;
+    return createTrueFalseButtons("vrai","faux");
   }
 
-  // Mode TROUVE L’ERREUR
   if(state.mode === "erreur"){
-    createTrueFalseButtons("juste","faux");
-    return;
+    return createTrueFalseButtons("juste","faux");
   }
 
-  // Sinon → pavé numérique classique
   const digits=[[1,2,3],[4,5,6],[7,8,9],['Eff',0,'OK']];
   digits.forEach(row=>{
     row.forEach(val=>{
       const b=document.createElement("button");
       b.type="button";
       b.textContent=val;
-
       if(val==='Eff') b.className="numpad-eff";
       if(val==='OK')  b.className="numpad-ok";
-
       b.onclick=()=>handleNumpad(val);
       pad.appendChild(b);
     });
@@ -252,24 +347,15 @@ function createContextualPad(){
   });
 }
 
-// Boutons Vrai/Faux ou Juste/Faux
 function createTrueFalseButtons(txt1,txt2){
-  const pad = $('numpad');
-
+  const pad=$('numpad');
   let b1=document.createElement("button");
-  b1.type="button";
-  b1.textContent=txt1;
-  b1.className="numpad-vrai";
+  b1.type="button"; b1.textContent=txt1; b1.className="numpad-vrai";
   b1.onclick=()=>{ $('answer').value=txt1; submitAnswer(); };
-
   let b2=document.createElement("button");
-  b2.type="button";
-  b2.textContent=txt2;
-  b2.className="numpad-faux";
+  b2.type="button"; b2.textContent=txt2; b2.className="numpad-faux";
   b2.onclick=()=>{ $('answer').value=txt2; submitAnswer(); };
-
-  pad.appendChild(b1);
-  pad.appendChild(b2);
+  pad.appendChild(b1); pad.appendChild(b2);
 }
 
 function handleNumpad(v){
@@ -284,7 +370,9 @@ function handleNumpad(v){
 // --------------------------------------------------
 function nextQuestion(){
   state.questionCount++;
-  if(state.questionCount > state.numQuestions){ return finishGame(); }
+  if(state.questionCount > state.numQuestions){
+    return finishGame();
+  }
 
   let [min,max]=getRangeFromLevel(state.level);
   let a=randInt(min,max), b=randInt(min,max);
@@ -299,28 +387,15 @@ function nextQuestion(){
 
   state.correctAnswer = rep;
 
-  // Mode vrai/faux → valeur potentiellement fausse
   if(state.mode==="vrai_faux"){
-    let correct = Math.random() < 0.5;
-    let shown = rep;
-
-    if(!correct){
-      shown = rep + randInt(1,5);
-    }
-
+    let shown = rep + (Math.random()<0.5?0:randInt(1,5));
     state.vraiFauxIsTrue = (shown === rep);
     state.currentQuestion = quest+" = "+shown;
   }
 
-  // Mode trouve l'erreur → "juste ou faux"
   else if(state.mode==="erreur"){
     let isWrong = Math.random() < 0.5;
-    let shown = rep;
-
-    if(isWrong){
-      shown = rep + randInt(1,3);
-    }
-
+    let shown = isWrong ? rep + randInt(1,3) : rep;
     state.erreurQuestion = isWrong;
     state.currentQuestion = quest+" = "+shown;
   }
@@ -338,25 +413,22 @@ function nextQuestion(){
 }
 
 // --------------------------------------------------
-// VALIDATION DES RÉPONSES
+// RÉPONSES
 // --------------------------------------------------
 function submitAnswer(){
   let ans = $('answer').value.trim().toLowerCase();
   let ok=false;
 
-  if(state.mode==="multiplication" || state.mode==="chrono" || state.mode==="classique"){
+  if(state.mode==="multiplication" || state.mode==="chrono"){
     ok = (parseInt(ans) === state.correctAnswer);
   }
-
   else if(state.mode==="vrai_faux"){
     let userTrue = /^(vrai|true|1)$/i.test(ans);
     ok = (userTrue === state.vraiFauxIsTrue);
   }
-
   else if(state.mode==="erreur"){
     let userJuste = /^(juste|true|1)$/i.test(ans);
     let userFaux  = /^(faux|false|0)$/i.test(ans);
-
     ok = (state.erreurQuestion && userFaux) || (!state.erreurQuestion && userJuste);
   }
 
@@ -369,13 +441,31 @@ function submitAnswer(){
 // FIN DE PARTIE
 // --------------------------------------------------
 function finishGame(){
+
+  if(state.mode==="chrono"){
+    stopChrono();
+
+    if(state.bestTime===null || state.chronoTime < state.bestTime){
+      state.bestTime = state.chronoTime;
+      localStorage.setItem("bestTime", state.chronoTime);
+    }
+  }
+
   $('game').classList.add('hidden');
   $('result').classList.remove('hidden');
 
   $('scoreText').textContent = `${state.correctCount}/${state.numQuestions}`;
 
+  if(state.mode==="chrono"){
+    $('bestTimeText').textContent = 
+      `⏱ Temps : ${state.chronoTime}s — Record : ${state.bestTime}s`;
+  } else {
+    $('bestTimeText').textContent = "";
+  }
+
   let qrData = {
-    resultat: `${state.operation} N${state.level} ${state.correctCount}/${state.numQuestions}`
+    resultat: `${state.operation} N${state.level} ${state.correctCount}/${state.numQuestions}`,
+    temps: state.chronoTime ?? null
   };
 
   new QRious({
@@ -391,6 +481,5 @@ $('restart').onclick = ()=>{
 };
 
 </script>
-
 </body>
 </html>
