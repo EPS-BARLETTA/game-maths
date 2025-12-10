@@ -1,304 +1,227 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Défi Mathématiques - ScanProf</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" defer></script>
+  <meta charset="UTF-8">
+  <title>Défi Mathématiques - ScanProf</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #111; 
+      color: #fff; 
+      margin: 0; 
+      padding: 0; 
+      min-height: 100vh; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  /* -------------------- GLOBAL -------------------- */
-  body {
-    margin: 0;
-    padding: 0;
-    background: #1f1f1f;
-    font-family: Arial, sans-serif;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-  }
+    /* CONTENEUR GLOBAL (au centre de l'écran) */
+    .wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-  /* Cadre principal — largeur maîtrisée */
-  .container {
-    width: 360px;
-    background: #2e2e2e;
-    border-radius: 18px;
-    padding: 20px;
-    margin-top: 20px;
-    box-shadow: 0 0 25px #0008;
-    text-align: center;
-  }
+    /* CADRE "carte iPad" */
+    .card {
+      width: 100%;
+      max-width: 420px;
+      padding: 35px 25px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #3a3a3a, #2b2b2b);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+      text-align: center;
+    }
 
-  h1, h2 {
-    margin: 0 0 15px 0;
-    font-weight: 600;
-  }
+    h1 { font-size: 2em; margin-bottom: 20px; }
 
-  button {
-    cursor: pointer;
-  }
+    /* INPUTS */
+    input[type="text"] {
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      width: 80%;
+      background: #222;
+      color: #fff;
+      font-size: 1.2em;
+      margin-bottom: 12px;
+      text-align: center;
+    }
 
-  /* -------------------- PAGE DE GARDE -------------------- */
-  #welcome {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 70vh;
-  }
+    /* BOUTONS GÉNÉRAUX */
+    button {
+      padding: 12px 24px;
+      font-size: 1.1em;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      margin: 5px;
+      transition: 0.2s;
+    }
 
-  #startApp {
-    background: white;
-    color: black;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 1.2em;
-    border: none;
-    font-weight: bold;
-  }
+    .main-btn {
+      background: #fff;
+      color: #222;
+      font-weight: bold;
+      width: 80%;
+    }
 
-  /* -------------------- MENU -------------------- */
+    /* CHAMP QUESTION */
+    #question {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      min-height: 40px;
+    }
 
-  input[type="text"] {
-    width: 80%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 10px;
-    border: none;
-    text-align: center;
-    font-size: 1.1em;
-    background: #444;
-    color: white;
-  }
+    /* NUMPAD */
+    #numpad {
+      margin-top: 15px;
+    }
+    #numpad-row {
+      display: flex;
+      justify-content: center;
+    }
+    #numpad-row button {
+      width: 60px;
+      height: 55px;
+      font-size: 1.3em;
+      background: #444;
+      color: #fff;
+      margin: 4px;
+      border-radius: 10px;
+    }
+    .numpad-eff { background: #aaa !important; color: #222 !important; }
+    .numpad-ok { background: #4CAF50 !important; color: #fff !important; }
 
-  /* Boutons généraux */
-  .menu-btn {
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: none;
-    margin: 5px;
-    color: white;
-    font-size: 1.05em;
-    box-shadow: 0 2px 4px #0005;
-  }
+    /* VRAI/FAUX */
+    .numpad-vrai {
+      background: #2ecc71;
+      width: 48%;
+      height: 55px;
+      border-radius: 12px;
+      font-size: 1.3em;
+    }
+    .numpad-faux {
+      background: #e74c3c;
+      width: 48%;
+      height: 55px;
+      border-radius: 12px;
+      font-size: 1.3em;
+    }
 
-  /* Opérations */
-  .operation-btn[data-op="multiply"] { background:#ff9800; }
-  .operation-btn[data-op="add"]      { background:#2196f3; }
-  .operation-btn[data-op="subtract"] { background:#9c27b0; }
-  .operation-btn[data-op="divide"]   { background:#e53935; }
-  .op-selected { outline: 2px solid #fff; }
+    /* MESSAGE CORRECTION */
+    #feedback {
+      font-size: 1.8em;
+      margin-top: 15px;
+      min-height: 40px;
+    }
 
-  /* Modes */
-  .mode-btn[data-mode="multiplication"] { background:#4CAF50; }
-  .mode-btn[data-mode="chrono"]         { background:#00BCD4; }
-  .mode-btn[data-mode="vrai_faux"]      { background:#F06292; }
-  .mode-btn[data-mode="erreur"]         { background:#795548; }
-  .mode-selected { outline: 2px solid #fff; }
+    /* CHRONO TEXTE */
+    #chronoLine {
+      margin-top: 8px;
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
 
-  /* Niveaux */
-  .level-btn[data-level="1"] { background:#A5D6A7; color:#000; }
-  .level-btn[data-level="2"] { background:#FFF176; color:#000; }
-  .level-btn[data-level="3"] { background:#90A4AE; }
-  .level-selected { outline: 2px solid #fff; }
-
-  /* Questions */
-  .questions-btn { background:#333; }
-  .questions-selected { background:#03A9F4; outline:2px solid #fff; }
-
-  /* Tables */
-  .table-btn { background:#333; width: 55px; }
-  .table-selected { background:#009688; outline:2px solid #fff; }
-
-  /* Bouton "Jouer" */
-  #btn-play {
-    background: white;
-    color: black;
-    font-weight: 700;
-    padding: 12px 24px;
-    border-radius: 12px;
-    margin-top: 15px;
-    border: none;
-    box-shadow: 0 2px 5px #0007;
-  }
-
-  /* -------------------- JEU -------------------- */
-
-  #question {
-    font-size: 2em;
-    margin: 15px 0;
-    min-height: 2em;
-  }
-
-  /* Champ réponse */
-  #answer {
-    width: 80%;
-    padding: 10px;
-    margin-top: 8px;
-    background:#222;
-    border:none;
-    border-radius:8px;
-    color:white;
-    font-size:1.3em;
-    text-align:center;
-  }
-
-  /* Pavé numérique */
-  #numpad {
-    margin-top: 10px;
-  }
-
-  #numpad-row {
-    display: flex;
-    justify-content: center;
-  }
-
-  #numpad button {
-    width: 60px;
-    height: 54px;
-    margin: 4px;
-    font-size: 1.25em;
-    border-radius: 8px;
-    background:#444;
-    color:white;
-    border:none;
-  }
-
-  .numpad-eff { background:#aaa !important; color:#000 !important; }
-  .numpad-ok  { background:#4CAF50 !important; color:white !important; }
-
-  /* vrai/faux */
-  .numpad-vrai { background:#4CAF50 !important; width:45%; height:54px; }
-  .numpad-faux { background:#E53935 !important; width:45%; height:54px; }
-
-  /* Feedback réponse */
-  #feedback {
-    font-size: 1.3em;
-    margin-top: 8px;
-    min-height: 1.5em;
-  }
-
-  /* Barre chrono */
-  #chronoBar {
-    width: 100%;
-    height: 12px;
-    background:#555;
-    border-radius:6px;
-    overflow:hidden;
-    margin-top:10px;
-  }
-
-  #chronoFill {
-    height: 100%;
-    background:#00e676;
-    width:100%;
-  }
-
-  /* -------------------- RÉSULTATS -------------------- */
-
-  #result canvas {
-    margin: 15px auto;
-    display: block;
-  }
-
-  #restart {
-    background:white;
-    color:black;
-    padding:10px 20px;
-    border-radius:10px;
-    border:none;
-    margin-top:15px;
-    font-weight:bold;
-  }
-
-  .hidden { display:none !important; }
-
-</style>
+    .hidden { display: none !important; }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="wrap">
+  <div class="card">
 
-  <!-- PAGE DE GARDE -->
-  <div id="welcome">
-    <h1>🧮 Défi Mathématiques</h1>
-    <button id="startApp">Démarrer</button>
-  </div>
-
-  <!-- MENU -->
-  <div id="start" class="hidden">
-
-    <p>Prénom : <input id="prenom" type="text" maxlength="18"></p>
-    <p>Classe : <input id="classe" type="text" maxlength="18"></p>
-
-    <div id="op-choose"></div>
-
-    <div id="tables-choose" class="hidden"></div>
-
-    <div id="level-choose"></div>
-
-    <div id="questions-choose"></div>
-
-    <div id="mode-choose"></div>
-
-    <div id="chronoPickerContainer" class="hidden"></div>
-
-    <button id="btn-play">Valider et jouer</button>
-  </div>
-
-  <!-- JEU -->
-  <div id="game" class="hidden">
-    <div id="question"></div>
-    <input id="answer" type="text">
-
-    <div id="feedback"></div>
-
-    <div id="numpad"></div>
-
-    <div id="chronoBar" class="hidden">
-      <div id="chronoFill"></div>
+    <!-- PAGE DE GARDE -->
+    <div id="welcome">
+      <h1>🧮 Défi Mathématiques</h1>
+      <button id="startApp" class="main-btn">Démarrer</button>
     </div>
 
-    <p id="progress"></p>
-    <p id="chronoLine"></p>
-  </div>
+    <!-- MENU -->
+    <div id="start" class="hidden">
+      <p>Prénom :</p>
+      <input id="prenom" type="text" maxlength="18">
 
-  <!-- RÉSULTATS -->
-  <div id="result" class="hidden">
-    <h2>Résultat</h2>
-    <p id="scoreText"></p>
-    <p id="bestTimeText"></p>
-    <canvas id="qr"></canvas>
-    <button id="restart">Rejouer</button>
-  </div>
+      <p>Classe :</p>
+      <input id="classe" type="text" maxlength="18">
 
+      <p>Type d'opération :</p>
+      <div id="op-choose"></div>
+
+      <div id="tables-choose" class="hidden"></div>
+
+      <p>Niveau :</p>
+      <div id="level-choose"></div>
+
+      <p>Nombre de questions :</p>
+      <div id="questions-choose"></div>
+
+      <h3>Mode :</h3>
+      <div id="mode-choose"></div>
+
+      <div id="chronoPickerContainer" class="hidden">
+        <button id="launchChrono" class="main-btn hidden">Démarrer l’exercice</button>
+      </div>
+
+      <button id="btn-play" class="main-btn">Valider et jouer</button>
+    </div>
+
+    <!-- JEU -->
+    <div id="game" class="hidden">
+      <div id="question"></div>
+      <input id="answer" autocomplete="off">
+
+      <div id="feedback"></div>
+
+      <div id="numpad"></div>
+
+      <p id="progress"></p>
+      <p id="chronoLine"></p>
+    </div>
+
+    <!-- RÉSULTATS -->
+    <div id="result" class="hidden">
+      <h2>Résultat</h2>
+      <p id="scoreText"></p>
+      <p id="bestTimeText"></p>
+      <canvas id="qr"></canvas>
+      <button id="restart" class="main-btn">Rejouer</button>
+    </div>
+
+  </div>
 </div>
 
-<!-- ICI TU COLLERAS LE BLOC 2 -->
+<!-- 🔽 ICI TU COLLES LE BLOC 2 DIRECTEMENT EN DESSOUS 🔽 -->
 <script>
 // --------------------------------------------------
 // ÉTAT GLOBAL
 // --------------------------------------------------
 let state = {
   mode: null,
-  operation: "multiply",
+  operation: 'multiply',
   level: 1,
   numQuestions: 10,
-  prenom: "",
-  classe: "",
+  prenom: '',
+  classe: '',
   questionCount: 0,
   correctCount: 0,
-  currentQuestion: "",
+  currentQuestion: '',
   correctAnswer: null,
   chronoStart: 0,
   chronoTime: 0,
-  chronoDuration: 60,
+  chronoDuration: 60, // DURÉE PAR DÉFAUT
   bestTime: localStorage.getItem("bestTime") ?? null,
   vraiFauxIsTrue: false,
   erreurQuestion: false,
-  selectedTables: []
+  selectedTables: [],
+  chronoActive: false
 };
 
 const $ = id => document.getElementById(id);
@@ -306,58 +229,61 @@ const $ = id => document.getElementById(id);
 // --------------------------------------------------
 // PAGE DE GARDE
 // --------------------------------------------------
-$("startApp").onclick = () => {
-  $("welcome").classList.add("hidden");
-  $("start").classList.remove("hidden");
+$('startApp').onclick = () => {
+  $('welcome').classList.add('hidden');
+  $('start').classList.remove('hidden');
 };
 
 // --------------------------------------------------
-// CRÉATION DES BOUTONS DU MENU
+// OPÉRATIONS
 // --------------------------------------------------
-
-/* --- Opérations --- */
 const ops = [
-  { op: "multiply", label: "×" },
-  { op: "add", label: "+" },
-  { op: "subtract", label: "−" },
-  { op: "divide", label: "÷" }
+  {op:"multiply", label:"× Multiplication"},
+  {op:"add", label:"+ Addition"},
+  {op:"subtract", label:"− Soustraction"},
+  {op:"divide", label:"÷ Division"}
 ];
 
-ops.forEach(o => {
-  let b = document.createElement("button");
-  b.className = "menu-btn operation-btn";
-  b.dataset.op = o.op;
-  b.textContent = o.label;
+ops.forEach(o=>{
+  let b=document.createElement("button");
+  b.className="operation-btn";
+  b.dataset.op=o.op;
+  b.textContent=o.label;
 
-  b.onclick = () => {
-    state.operation = o.op;
+  b.onclick=()=>{
+    state.operation=o.op;
 
-    document.querySelectorAll(".operation-btn").forEach(x => x.classList.remove("op-selected"));
-    b.classList.add("op-selected");
+    document.querySelectorAll('.operation-btn').forEach(x=>{
+      x.classList.remove('op-selected');
+    });
+    b.classList.add('op-selected');
 
-    $("tables-choose").classList.toggle("hidden", o.op !== "multiply");
+    $('tables-choose').classList.toggle('hidden', o.op!=="multiply");
 
     if (o.op !== "multiply") {
       state.selectedTables = [];
-      document.querySelectorAll(".table-btn").forEach(t => t.classList.remove("table-selected"));
+      document.querySelectorAll(".table-btn").forEach(t=>t.classList.remove("table-selected"));
     }
   };
 
-  $("op-choose").appendChild(b);
+  $('op-choose').appendChild(b);
 });
-document.querySelector('.operation-btn[data-op="multiply"]').classList.add("op-selected");
+document.querySelector('.operation-btn[data-op="multiply"]').classList.add('op-selected');
 
-/* --- Tables personnalisées --- */
+// --------------------------------------------------
+// TABLES PERSONNALISÉES
+// --------------------------------------------------
 let htmlTables = "";
-for (let i = 1; i <= 12; i++) htmlTables += `<button class="table-btn menu-btn" data-table="${i}">${i}</button>`;
-$("tables-choose").innerHTML = htmlTables;
+for(let i=1;i<=12;i++){
+  htmlTables += `<button class="table-btn" data-table="${i}">${i}</button>`;
+}
+$('tables-choose').innerHTML = "<h3>Tables personnalisées :</h3>" + htmlTables;
 
-document.querySelectorAll(".table-btn").forEach(btn => {
-  btn.onclick = () => {
+document.querySelectorAll(".table-btn").forEach(btn=>{
+  btn.onclick=()=>{
     let val = parseInt(btn.dataset.table);
-
-    if (state.selectedTables.includes(val)) {
-      state.selectedTables = state.selectedTables.filter(x => x !== val);
+    if(state.selectedTables.includes(val)){
+      state.selectedTables = state.selectedTables.filter(x=>x!==val);
       btn.classList.remove("table-selected");
     } else {
       state.selectedTables.push(val);
@@ -366,186 +292,192 @@ document.querySelectorAll(".table-btn").forEach(btn => {
   };
 });
 
-/* --- Niveaux --- */
-[1, 2, 3].forEach(l => {
-  let b = document.createElement("button");
-  b.className = "menu-btn level-btn";
-  b.dataset.level = l;
-  b.textContent = "Niveau " + l;
+// --------------------------------------------------
+// NIVEAUX
+// --------------------------------------------------
+[1,2,3].forEach(l=>{
+  let b=document.createElement("button");
+  b.className="level-btn";
+  b.dataset.level=l;
+  b.textContent="Niveau "+l;
 
-  b.onclick = () => {
-    state.level = l;
-    document.querySelectorAll(".level-btn").forEach(x => x.classList.remove("level-selected"));
-    b.classList.add("level-selected");
+  b.onclick=()=>{
+    state.level=l;
+    document.querySelectorAll('.level-btn').forEach(x=>x.classList.remove('level-selected'));
+    b.classList.add('level-selected');
   };
 
-  $("level-choose").appendChild(b);
+  $('level-choose').appendChild(b);
 });
-document.querySelector('.level-btn[data-level="1"]').classList.add("level-selected");
+document.querySelector('.level-btn[data-level="1"]').classList.add('level-selected');
 
-/* --- Nombre de questions --- */
-[10, 15, 20].forEach(q => {
-  let b = document.createElement("button");
-  b.className = "menu-btn questions-btn";
-  b.dataset.q = q;
-  b.textContent = q;
+// --------------------------------------------------
+// NOMBRE DE QUESTIONS
+// --------------------------------------------------
+[10,15,20].forEach(q=>{
+  let b=document.createElement("button");
+  b.className="questions-btn";
+  b.dataset.q=q;
+  b.textContent=q;
 
-  b.onclick = () => {
-    state.numQuestions = q;
-    document.querySelectorAll(".questions-btn").forEach(x => x.classList.remove("questions-selected"));
-    b.classList.add("questions-selected");
+  b.onclick=()=>{
+    state.numQuestions=q;
+    document.querySelectorAll('.questions-btn').forEach(x=>x.classList.remove('questions-selected'));
+    b.classList.add('questions-selected');
   };
 
-  $("questions-choose").appendChild(b);
+  $('questions-choose').appendChild(b);
 });
-document.querySelector('.questions-btn[data-q="10"]').classList.add("questions-selected");
+document.querySelector('.questions-btn[data-q="10"]').classList.add('questions-selected');
 
-/* --- Modes --- */
+// --------------------------------------------------
+// MODES
+// --------------------------------------------------
 const modes = [
-  { m: "multiplication", label: "Classique" },
-  { m: "chrono", label: "Chrono" },
-  { m: "vrai_faux", label: "Vrai/Faux" },
-  { m: "erreur", label: "Erreur" }
+  {m:"multiplication", label:"Classique"},
+  {m:"chrono", label:"Chrono"},
+  {m:"vrai_faux", label:"Vrai/Faux"},
+  {m:"erreur", label:"Erreur"}
 ];
 
-modes.forEach(o => {
-  let b = document.createElement("button");
-  b.className = "menu-btn mode-btn";
-  b.dataset.mode = o.m;
-  b.textContent = o.label;
+modes.forEach(o=>{
+  let b=document.createElement("button");
+  b.className="mode-btn";
+  b.dataset.mode=o.m;
+  b.textContent=o.label;
 
-  b.onclick = () => {
-    state.mode = o.m;
+  b.onclick=()=>{
+    state.mode=o.m;
 
-    document.querySelectorAll(".mode-btn").forEach(x => x.classList.remove("mode-selected"));
-    b.classList.add("mode-selected");
+    document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('mode-selected'));
+    b.classList.add('mode-selected');
 
-    $("chronoPickerContainer").classList.toggle("hidden", o.m !== "chrono");
+    $('chronoPickerContainer').classList.toggle('hidden', o.m!=="chrono");
+    $('launchChrono').classList.add('hidden');
   };
 
-  $("mode-choose").appendChild(b);
+  $('mode-choose').appendChild(b);
 });
-document.querySelector('.mode-btn[data-mode="multiplication"]').classList.add("mode-selected");
+document.querySelector('.mode-btn[data-mode="multiplication"]').classList.add('mode-selected');
 
-/* --- Sélecteur temps (chrono) --- */
-let timeSelector = document.createElement("select");
-timeSelector.style.padding = "8px";
-timeSelector.style.fontSize = "1.1em";
-timeSelector.style.borderRadius = "8px";
+// --------------------------------------------------
+// CHOIX TEMPS – LISTE SIMPLE
+// --------------------------------------------------
+let selector = document.createElement("select");
+selector.style.fontSize = "1.1em";
+selector.style.padding = "6px";
+selector.style.borderRadius = "8px";
 
-for (let t = 5; t <= 120; t += 5) {
+for (let t=10; t<=120; t+=10){
   let opt = document.createElement("option");
   opt.value = t;
   opt.textContent = t + " sec";
-  timeSelector.appendChild(opt);
+  selector.appendChild(opt);
 }
-timeSelector.onchange = () => (state.chronoDuration = parseInt(timeSelector.value));
-$("chronoPickerContainer").appendChild(timeSelector);
+
+selector.onchange = () => {
+  state.chronoDuration = parseInt(selector.value);
+  $('launchChrono').classList.remove('hidden');
+};
+
+$('chronoPickerContainer').appendChild(selector);
 
 // --------------------------------------------------
-// LANCEMENT DU JEU
+// BOUTON "Démarrer exercice" (mode chrono)
 // --------------------------------------------------
-$("btn-play").onclick = () => {
-  state.prenom = $("prenom").value.trim();
-  state.classe = $("classe").value.trim();
+$('launchChrono').onclick = () => {
+  $('start').classList.add('hidden');
+  $('result').classList.add('hidden');
+  $('game').classList.remove('hidden');
 
-  if (!state.prenom || !state.classe) {
-    alert("Merci d’indiquer un prénom et une classe.");
-    return;
-  }
-
-  state.questionCount = 0;
-  state.correctCount = 0;
-
-  $("start").classList.add("hidden");
-  $("result").classList.add("hidden");
-  $("game").classList.remove("hidden");
-  $("feedback").textContent = "";
-
-  if (state.mode === "chrono") {
-    state.chronoStart = Date.now();
-    $("chronoBar").classList.remove("hidden");
-    startChrono();
-  } else {
-    $("chronoBar").classList.add("hidden");
-  }
+  state.chronoActive = true;
+  startChrono();
 
   nextQuestion();
 };
 
 // --------------------------------------------------
-// CHRONO
+// BOUTON LANCER JEU (hors mode chrono)
+// --------------------------------------------------
+$('btn-play').onclick = () => {
+
+  state.prenom = $('prenom').value.trim();
+  state.classe = $('classe').value.trim();
+
+  if (!state.prenom || !state.classe) {
+    alert("Merci d’entrer un prénom et une classe.");
+    return;
+  }
+
+  if(state.mode==="chrono"){
+    alert("Sélectionne une durée et clique sur 'Démarrer l’exercice'.");
+    return;
+  }
+
+  $('start').classList.add('hidden');
+  $('result').classList.add('hidden');
+  $('game').classList.remove('hidden');
+
+  state.chronoActive = false;
+
+  nextQuestion();
+};
+
+// --------------------------------------------------
+// CHRONO SIMPLE (texte uniquement)
 // --------------------------------------------------
 let chronoInterval = null;
 
-function startChrono() {
-  if (chronoInterval) clearInterval(chronoInterval);
+function startChrono(){
+  state.chronoStart = Date.now();
 
-  let total = state.chronoDuration;
+  if(chronoInterval) clearInterval(chronoInterval);
 
-  chronoInterval = setInterval(() => {
+  chronoInterval = setInterval(()=>{
     let elapsed = Math.floor((Date.now() - state.chronoStart) / 1000);
-    let remaining = Math.max(0, total - elapsed);
-    $("chronoFill").style.width = (remaining / total) * 100 + "%";
-    $("chronoLine").textContent = elapsed + " sec";
-
-    if (elapsed >= total) {
-      clearInterval(chronoInterval);
-      submitAnswer(); // fin automatique
-    }
+    state.chronoTime = elapsed;
+    $('chronoLine').textContent = "⏱ " + elapsed + " sec";
   }, 200);
 }
 
-function stopChrono() {
-  if (chronoInterval) clearInterval(chronoInterval);
-  state.chronoTime = Math.floor((Date.now() - state.chronoStart) / 1000);
+function stopChrono(){
+  if(chronoInterval) clearInterval(chronoInterval);
 }
 
 // --------------------------------------------------
-// OUTILS
+// NUMPAD
 // --------------------------------------------------
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function levelRange(level) {
-  if (level === 1) return [1, 9];
-  if (level === 2) return [10, 20];
-  return [10, 99];
-}
-
-// --------------------------------------------------
-// PAVÉ NUMÉRIQUE
-// --------------------------------------------------
-function createPad() {
-  const pad = $("numpad");
+function createPad(){
+  const pad = $('numpad');
   pad.innerHTML = "";
 
-  // VRAI / FAUX mode
-  if (state.mode === "vrai_faux") return createVF("vrai", "faux");
-  if (state.mode === "erreur") return createVF("juste", "faux");
+  if(state.mode==="vrai_faux"){
+    return createVF("vrai","faux");
+  }
 
-  // Pavé classique
+  if(state.mode==="erreur"){
+    return createVF("juste","faux");
+  }
+
   const rows = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-    ["Eff", 0, "OK"]
+    [1,2,3],
+    [4,5,6],
+    [7,8,9],
+    ['Eff',0,'OK']
   ];
 
-  rows.forEach(r => {
-    let line = document.createElement("div");
-    line.id = "numpad-row";
+  rows.forEach(r=>{
+    let line=document.createElement("div");
+    line.id="numpad-row";
 
-    r.forEach(v => {
-      let b = document.createElement("button");
-      b.textContent = v;
+    r.forEach(v=>{
+      let b=document.createElement("button");
+      b.textContent=v;
 
-      if (v === "Eff") b.className = "numpad-eff";
-      if (v === "OK") b.className = "numpad-ok";
+      if(v==="Eff") b.className="numpad-eff";
+      if(v==="OK") b.className="numpad-ok";
 
-      b.onclick = () => handleNumpad(v);
-
+      b.onclick = ()=> handleNumpad(v);
       line.appendChild(b);
     });
 
@@ -553,171 +485,171 @@ function createPad() {
   });
 }
 
-function createVF(a, b) {
-  $("numpad").innerHTML = `
-    <button class="numpad-vrai">${a}</button>
-    <button class="numpad-faux">${b}</button>
-  `;
+function createVF(txt1, txt2){
+  const pad = $('numpad');
+  pad.innerHTML = "";
 
-  document.querySelector(".numpad-vrai").onclick = () => {
-    $("answer").value = a;
-    submitAnswer();
-  };
-  document.querySelector(".numpad-faux").onclick = () => {
-    $("answer").value = b;
-    submitAnswer();
-  };
+  let b1=document.createElement("button");
+  b1.className="numpad-vrai";
+  b1.textContent=txt1;
+  b1.onclick=()=>{ $('answer').value=txt1; submitAnswer(); };
+
+  let b2=document.createElement("button");
+  b2.className="numpad-faux";
+  b2.textContent=txt2;
+  b2.onclick=()=>{ $('answer').value=txt2; submitAnswer(); };
+
+  pad.appendChild(b1);
+  pad.appendChild(b2);
 }
 
-function handleNumpad(v) {
-  let input = $("answer");
+function handleNumpad(v){
+  let input = $('answer');
 
-  if (typeof v === "number") input.value += v;
-  else if (v === "Eff") input.value = input.value.slice(0, -1);
-  else if (v === "OK") submitAnswer();
+  if(typeof v === "number"){
+    input.value += v;
+  }
+  else if(v === "Eff"){
+    input.value = input.value.slice(0,-1);
+  }
+  else if(v === "OK"){
+    submitAnswer();
+  }
 }
 
 // --------------------------------------------------
-// GÉNÉRATION QUESTION
+// GÉNÉRATION DES QUESTIONS
 // --------------------------------------------------
-function nextQuestion() {
-  $("feedback").textContent = "";
+function nextQuestion(){
+
+  $('feedback').textContent = "";
 
   state.questionCount++;
-  $("progress").textContent = `${state.questionCount}/${state.numQuestions}`;
+  if(state.questionCount > state.numQuestions){
+    return finishGame();
+  }
 
-  if (state.questionCount > state.numQuestions) return finishGame();
+  let a,b,rep,quest;
 
-  let a, b, rep, quest;
-
-  if (state.operation === "multiply" && state.selectedTables.length > 0) {
-    a = state.selectedTables[randInt(0, state.selectedTables.length - 1)];
-    b = randInt(0, 12);
-    rep = a * b;
+  // Tables perso
+  if(state.operation==="multiply" && state.selectedTables.length>0){
+    a = state.selectedTables[randInt(0, state.selectedTables.length-1)];
+    b = randInt(0,12);
+    rep = a*b;
     quest = `${a} × ${b}`;
-  } else {
-    let [min, max] = levelRange(state.level);
-    a = randInt(min, max);
-    b = randInt(min, max);
+  }
+  else {
+    let [min,max] = getRangeFromLevel(state.level);
 
-    switch (state.operation) {
-      case "add":
-        rep = a + b;
-        quest = `${a} + ${b}`;
-        break;
+    a = randInt(min,max);
+    b = randInt(min,max);
 
-      case "subtract":
-        if (b > a) [a, b] = [b, a];
-        rep = a - b;
-        quest = `${a} − ${b}`;
-        break;
-
-      case "multiply":
-        rep = a * b;
-        quest = `${a} × ${b}`;
-        break;
-
-      case "divide":
-        rep = a;
-        quest = `${a * b} ÷ ${b}`;
-        break;
+    switch(state.operation){
+      case "add": rep=a+b; quest=`${a} + ${b}`; break;
+      case "subtract": if(b>a)[a,b]=[b,a]; rep=a-b; quest=`${a} − ${b}`; break;
+      case "multiply": rep=a*b; quest=`${a} × ${b}`; break;
+      case "divide": rep=a; quest=`${a*b} ÷ ${b}`; break;
     }
   }
 
-  state.correctAnswer = rep;
-
-  // VRAI/FAUX
-  if (state.mode === "vrai_faux") {
-    let shown = rep + (Math.random() < 0.5 ? 0 : randInt(1, 5));
-    state.vraiFauxIsTrue = shown === rep;
-    quest = `${quest} = ${shown}`;
+  // Mode vrai/faux ?
+  if(state.mode==="vrai_faux"){
+    let shown = rep + (Math.random()<0.5 ? 0 : randInt(1,5));
+    state.vraiFauxIsTrue = (shown === rep);
+    quest += " = " + shown;
   }
 
-  // ERREUR
-  if (state.mode === "erreur") {
+  // Mode erreur ?
+  if(state.mode==="erreur"){
     let wrong = Math.random() < 0.5;
-    let shown = wrong ? rep + randInt(1, 3) : rep;
+    let shown = wrong ? rep + randInt(1,3) : rep;
     state.erreurQuestion = wrong;
-    quest = `${quest} = ${shown}`;
+    quest += " = " + shown;
   }
 
   state.currentQuestion = quest;
-  $("question").textContent = quest;
-  $("answer").value = "";
-  $("answer").focus();
+  state.correctAnswer = rep;
+
+  $('question').textContent = quest;
+  $('progress').textContent = `${state.questionCount}/${state.numQuestions}`;
+  $('answer').value = "";
+  $('answer').focus();
 
   createPad();
 }
 
 // --------------------------------------------------
-// VALIDATION
+// VALIDATION RÉPONSE
 // --------------------------------------------------
-function submitAnswer() {
-  let ans = $("answer").value.trim().toLowerCase();
+function submitAnswer(){
+  let ans = $('answer').value.trim().toLowerCase();
   let ok = false;
 
-  // Modes classiques
-  if (state.mode === "multiplication" || state.mode === "chrono") {
-    ok = parseInt(ans) === state.correctAnswer;
+  if(state.mode==="multiplication" || state.mode==="chrono"){
+    ok = (parseInt(ans) === state.correctAnswer);
   }
 
-  // Mode VRAI / FAUX
-  if (state.mode === "vrai_faux") {
-    ok = (/^(vrai|true|1)$/i.test(ans)) === state.vraiFauxIsTrue;
+  if(state.mode==="vrai_faux"){
+    ok = (/^(vrai|true|1)$/i.test(ans) === state.vraiFauxIsTrue);
   }
 
-  // Mode ERREUR
-  if (state.mode === "erreur") {
+  if(state.mode==="erreur"){
     let juste = /^(juste|true|1)$/i.test(ans);
-    let faux = /^(faux|false|0)$/i.test(ans);
+    let faux  = /^(faux|false|0)$/i.test(ans);
     ok = (state.erreurQuestion && faux) || (!state.erreurQuestion && juste);
   }
 
-  // Feedback visuel
-  if (ok) {
-    state.correctCount++;
-    $("feedback").textContent = "✅ Bravo !";
+  // Afficher feedback pendant 1.5 sec
+  if(ok){
+    $('feedback').textContent = "✅ Bravo !";
   } else {
-    $("feedback").textContent = `❌ Mauvaise réponse — Correct : ${state.correctAnswer}`;
+    $('feedback').innerHTML = `❌ Faux<br>Réponse attendue : ${state.correctAnswer}`;
   }
 
-  setTimeout(() => nextQuestion(), 600);
+  setTimeout(()=>{
+    nextQuestion();
+  },1500);
+
+  if(ok) state.correctCount++;
 }
 
 // --------------------------------------------------
 // FIN DE PARTIE
 // --------------------------------------------------
-function finishGame() {
-  if (state.mode === "chrono") {
-    stopChrono();
+function finishGame(){
 
-    if (state.bestTime === null || state.chronoTime < state.bestTime) {
-      state.bestTime = state.chronoTime;
-      localStorage.setItem("bestTime", state.bestTime);
-    }
+  $('game').classList.add('hidden');
+  $('result').classList.remove('hidden');
+
+  if(state.mode==="chrono"){
+    stopChrono();
+    state.bestTime = state.bestTime === null ? state.chronoTime : Math.min(state.bestTime, state.chronoTime);
+    localStorage.setItem("bestTime", state.bestTime);
   }
 
-  $("game").classList.add("hidden");
-  $("result").classList.remove("hidden");
+  $('scoreText').textContent = `${state.correctCount}/${state.numQuestions}`;
 
-  $("scoreText").textContent = `${state.correctCount}/${state.numQuestions}`;
+  if(state.mode==="chrono"){
+    $('bestTimeText').textContent = `⏱ Temps : ${state.chronoTime}s — Record : ${state.bestTime}s`;
+  } else {
+    $('bestTimeText').textContent = "";
+  }
 
-  if (state.mode === "chrono") {
-    $("bestTimeText").textContent =
-      `⏱ Temps : ${state.chronoTime}s — Record : ${state.bestTime}s`;
-  } else $("bestTimeText").textContent = "";
-
+  // QR Code organisé et propre
   let qrData = {
     prenom: state.prenom,
     classe: state.classe,
-    score: `${state.correctCount}/${state.numQuestions}`,
     mode: state.mode,
-    temps: state.chronoTime ?? null
+    resultat: `${state.correctCount}/${state.numQuestions}`
   };
 
+  if(state.mode==="chrono"){
+    qrData.temps = state.chronoTime;
+  }
+
   new QRious({
-    element: $("qr"),
-    size: 240,
+    element: $('qr'),
+    size: 260,
     value: JSON.stringify(qrData)
   });
 }
@@ -725,8 +657,14 @@ function finishGame() {
 // --------------------------------------------------
 // REJOUER
 // --------------------------------------------------
-$("restart").onclick = () => {
-  $("result").classList.add("hidden");
-  $("start").classList.remove("hidden");
+$('restart').onclick = ()=>{
+  $('result').classList.add('hidden');
+  $('start').classList.remove('hidden');
 };
+
+// --------------------------------------------------
+// UTILITAIRE
+// --------------------------------------------------
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
 </script>
