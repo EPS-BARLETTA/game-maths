@@ -20,7 +20,7 @@
       align-items: center;
     }
 
-    /* CADRE PRINCIPAL ARRONDI, TAILLE TABLETTE */
+    /* CADRE PRINCIPAL */
     .container { 
       width: 100%;
       max-width: 580px;
@@ -31,7 +31,6 @@
       text-align: center;
     }
 
-    /* PAGE DE GARDE */
     #welcome h1 {
       font-size: 2.6rem;
       margin: 10px 0 24px;
@@ -49,11 +48,7 @@
       box-shadow: 0 3px 8px #0009;
     }
 
-    #startApp:active {
-      transform: translateY(1px);
-    }
-
-    /* BOUTONS GÉNÉRAUX */
+    /* BOUTONS */
     button.button,
     .operation-btn,
     .level-btn,
@@ -67,49 +62,39 @@
       cursor: pointer;
       border: none;
       box-shadow: 0 2px 6px #0006;
-      transition: 0.15s;
+      transition: 0.2s ease;
     }
 
-    button.button {
-      background:#ffffff;
-      color:#000;
-      font-weight:bold;
-    }
+    /* PASTELS */
+    .operation-btn[data-op="multiply"] { background:#FFE0A3; color:#000; }
+    .operation-btn[data-op="add"]      { background:#A7D8FF; color:#000; }
+    .operation-btn[data-op="subtract"] { background:#F7B7CF; color:#000; }
+    .operation-btn[data-op="divide"]   { background:#FFB5A7; color:#000; }
 
-    button:hover {
-      transform: translateY(-1px);
-    }
+    .level-btn[data-level="1"] { background:#C8E6C9; color:#000; }
+    .level-btn[data-level="2"] { background:#FFF9C4; color:#000; }
+    .level-btn[data-level="3"] { background:#B0BEC5; color:#000; }
 
-    /* PASTEL PREMIUM — OPÉRATIONS */
-    .operation-btn[data-op="multiply"] { background:#FFE0A3; color:#000; }  /* orange pastel */
-    .operation-btn[data-op="add"]      { background:#A7D8FF; color:#000; }  /* bleu pastel */
-    .operation-btn[data-op="subtract"] { background:#F7B7CF; color:#000; }  /* rose pastel */
-    .operation-btn[data-op="divide"]   { background:#FFB5A7; color:#000; }  /* saumon pastel */
-
-    /* NIVEAUX (pastels) */
-    .level-btn[data-level="1"] { background:#C8E6C9; color:#000; } /* vert clair */
-    .level-btn[data-level="2"] { background:#FFF9C4; color:#000; } /* jaune clair */
-    .level-btn[data-level="3"] { background:#B0BEC5; color:#000; } /* bleu-gris */
-
-    /* MODES (pastels) */
     .mode-btn[data-mode="multiplication"] { background:#D1C4E9; color:#000; }
     .mode-btn[data-mode="chrono"]         { background:#B3E5FC; color:#000; }
     .mode-btn[data-mode="vrai_faux"]      { background:#FFCDD2; color:#000; }
     .mode-btn[data-mode="erreur"]         { background:#FFE0B2; color:#000; }
 
-    /* NOMBRE DE QUESTIONS */
     .questions-btn { background:#E0E0E0; color:#000; }
 
-    /* SÉLECTION : bouton qui se fonce légèrement */
+    /* ⭐⭐⭐ VISUEL DE SÉLECTION (MODIFIÉ) ⭐⭐⭐ */
     .op-selected,
     .level-selected,
     .questions-selected,
-    .mode-selected {
-      filter: brightness(0.85);
+    .mode-selected,
+    .table-selected {
+      filter: brightness(0.70);
       border: 3px solid #fff;
+      box-shadow: 0 0 14px #ffffffaa;
+      transform: scale(1.10);
     }
 
-    /* INPUT PRÉNOM / CLASSE — PLUS GRAND */
+    /* INPUTS */
     #prenom, #classe {
       width: 85%;
       font-size: 1.4rem;
@@ -122,25 +107,12 @@
       text-align:center;
     }
 
-    #start p {
-      font-size:1.1rem;
-      margin:8px 0;
-    }
-
-    h2 {
-      font-size: 1.4rem;
-      margin: 14px 0 6px;
-    }
+    h2 { font-size: 1.4rem; margin: 14px 0 6px; }
 
     .hidden { display:none !important; }
 
-    /* PAGE DE JEU */
-    #question {
-      font-size: 3rem;
-      margin-top: 10px;
-      min-height: 72px;
-    }
-
+    /* JEU */
+    #question { font-size: 3rem; margin-top: 10px; min-height: 72px; }
     #answer {
       width: 80%;
       font-size: 2rem;
@@ -151,21 +123,6 @@
       border-radius:14px;
       color:white;
       text-align:center;
-    }
-
-    #chronoLine {
-      font-size:1.6rem;
-      margin-top:14px;
-    }
-
-    #progress {
-      font-size:1.5rem;
-      margin-top:10px;
-    }
-
-    /* Pavé numérique GROS pour tablette */
-    #numpad {
-      margin-top: 14px;
     }
 
     #numpad button {
@@ -182,9 +139,8 @@
     .numpad-eff { background:#bdbdbd !important; color:#222 !important; }
     .numpad-ok  { background:#4CAF50 !important; color:white !important; }
 
-    /* BOUTONS VRAI / FAUX PREMIUM (VERT / ROUGE PLUS FONCÉS) */
     .numpad-vrai {
-      background:#34C759 !important;   /* vert style iOS */
+      background:#34C759 !important;
       width:46%;
       height:90px;
       font-size:2rem;
@@ -195,7 +151,7 @@
     }
 
     .numpad-faux {
-      background:#FF3B30 !important;   /* rouge style iOS */
+      background:#FF3B30 !important;
       width:46%;
       height:90px;
       font-size:2rem;
@@ -205,22 +161,9 @@
       color:white;
     }
 
-    /* RÉSULTATS */
-    #result h2 {
-      font-size:2.2rem;
-      margin-top:4px;
-    }
-
-    #scoreText {
-      font-size:2rem;
-      margin:8px 0;
-    }
-
-    #bestTimeText {
-      font-size:1.3rem;
-      opacity:0.85;
-      margin:4px 0 14px;
-    }
+    #result h2 { font-size:2.2rem; }
+    #scoreText { font-size:2rem; }
+    #bestTimeText { font-size:1.3rem; opacity:0.85; }
   </style>
 </head>
 
@@ -255,7 +198,6 @@
 
     <button id="btn-play" class="button" style="margin-top:14px;">Valider</button>
   </div>
-
   <!-- PAGE DE JEU -->
   <div id="game" class="hidden">
     <div id="question"></div>
@@ -277,7 +219,7 @@
     <button id="restart" class="button" style="margin-top:16px;">Rejouer</button>
   </div>
 
-</div>
+</div> <!-- FIN CONTAINER -->
 
 <script>
   // --------------------------------------------------
@@ -316,7 +258,9 @@
   // --------------------------------------------------
   // UTILITAIRES
   // --------------------------------------------------
-  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function randInt(min,max){ 
+    return Math.floor(Math.random()*(max-min+1))+min; 
+  }
 
   function getRangeFromLevel(level){
     if(level===1) return [1,9];
@@ -354,7 +298,8 @@
       } else {
         tDiv.classList.add('hidden');
         state.selectedTables = [];
-        document.querySelectorAll(".table-btn").forEach(t=>t.classList.remove("table-selected"));
+        document.querySelectorAll(".table-btn")
+          .forEach(t=>t.classList.remove("table-selected"));
       }
     };
 
@@ -373,8 +318,9 @@
       b.className="table-btn";
       b.dataset.table=i;
       b.textContent=i;
+
       b.onclick=()=>{
-        let val=parseInt(b.dataset.table);
+        let val = parseInt(b.dataset.table);
         if(state.selectedTables.includes(val)){
           state.selectedTables = state.selectedTables.filter(x=>x!==val);
           b.classList.remove("table-selected");
@@ -383,6 +329,7 @@
           b.classList.add("table-selected");
         }
       };
+
       tDiv.appendChild(b);
     }
   })();
@@ -396,7 +343,8 @@
 
     b.onclick=()=>{
       state.level=l;
-      document.querySelectorAll('.level-btn').forEach(x=>x.classList.remove('level-selected'));
+      document.querySelectorAll('.level-btn')
+        .forEach(x=>x.classList.remove('level-selected'));
       b.classList.add('level-selected');
     };
 
@@ -412,7 +360,8 @@
 
     b.onclick=()=>{
       state.numQuestions=q;
-      document.querySelectorAll('.questions-btn').forEach(x=>x.classList.remove('questions-selected'));
+      document.querySelectorAll('.questions-btn')
+        .forEach(x=>x.classList.remove('questions-selected'));
       b.classList.add('questions-selected');
     };
 
@@ -435,7 +384,8 @@
 
     b.onclick=()=>{
       state.mode=o.m;
-      document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('mode-selected'));
+      document.querySelectorAll('.mode-btn')
+        .forEach(x=>x.classList.remove('mode-selected'));
       b.classList.add('mode-selected');
     };
 
@@ -444,7 +394,7 @@
 
   // Sélections par défaut
   document.querySelector('.operation-btn[data-op="multiply"]').classList.add('op-selected');
-  $('tables-choose').classList.remove('hidden'); // par défaut, on affiche les tables
+  $('tables-choose').classList.remove('hidden');
   document.querySelector('.level-btn[data-level="1"]').classList.add('level-selected');
   document.querySelector('.questions-btn[data-q="10"]').classList.add('questions-selected');
   document.querySelector('.mode-btn[data-mode="multiplication"]').classList.add('mode-selected');
@@ -471,12 +421,11 @@
 
       pad.appendChild(v);
       pad.appendChild(f);
-      // on masque le champ texte (pas utile)
       $('answer').style.visibility = 'hidden';
       return;
     }
 
-    // Mode ERREUR (Juste / Faux)
+    // Mode ERREUR
     if(state.mode === "erreur"){
       let j = document.createElement("button");
       j.className = "numpad-vrai";
@@ -494,7 +443,7 @@
       return;
     }
 
-    // Sinon : mode numérique classique (on montre le champ de réponse)
+    // Mode normal
     $('answer').style.visibility = 'visible';
 
     const rows = [
@@ -535,7 +484,6 @@
       submitAnswer();
     }
   }
-
   // --------------------------------------------------
   // GÉNÉRATION DES QUESTIONS
   // --------------------------------------------------
@@ -561,10 +509,26 @@
       b = randInt(min,max);
 
       switch(state.operation){
-        case "add":      rep=a+b; quest=`${a} + ${b}`; break;
-        case "subtract": if(b>a)[a,b]=[b,a]; rep=a-b; quest=`${a} − ${b}`; break;
-        case "multiply": rep=a*b; quest=`${a} × ${b}`; break;
-        case "divide":   rep=a;   quest=`${a*b} ÷ ${b}`; break;
+        case "add":      
+          rep = a + b; 
+          quest = `${a} + ${b}`; 
+          break;
+
+        case "subtract": 
+          if(b > a) [a,b] = [b,a];
+          rep = a - b; 
+          quest = `${a} − ${b}`; 
+          break;
+
+        case "multiply": 
+          rep = a * b; 
+          quest = `${a} × ${b}`; 
+          break;
+
+        case "divide":   
+          rep = a; 
+          quest = `${a*b} ÷ ${b}`; 
+          break;
       }
     }
 
@@ -573,13 +537,13 @@
     // Mode VRAI / FAUX
     if(state.mode==="vrai_faux"){
       let shown = rep + (Math.random()<0.5 ? 0 : randInt(1,5));
-      state.vraiFauxIsTrue = (shown===rep);
+      state.vraiFauxIsTrue = (shown === rep);
       quest += " = " + shown;
     }
 
     // Mode ERREUR
     if(state.mode==="erreur"){
-      let wrong = Math.random()<0.5;
+      let wrong = Math.random() < 0.5;
       let shown = wrong ? rep + randInt(1,3) : rep;
       state.erreurQuestion = wrong;
       quest += " = " + shown;
@@ -618,7 +582,7 @@
       ok = (state.erreurQuestion && faux) || (!state.erreurQuestion && juste);
     }
 
-    // Affichage ✔️ / ❌ + bonne réponse
+    // Affichage ✔️ / ❌
     if(ok){
       $('question').textContent = "✔️ Bonne réponse !";
     } else {
@@ -627,12 +591,11 @@
 
     if(ok) state.correctCount++;
 
-    // petite pause (1.3s) avant prochaine question
     setTimeout(nextQuestion, 1300);
   }
 
   // --------------------------------------------------
-  // LANCEMENT DU JEU (depuis la page de sélection)
+  // LANCEMENT DU JEU
   // --------------------------------------------------
   $('btn-play').onclick = ()=>{
     state.prenom = $('prenom').value.trim();
@@ -654,24 +617,25 @@
     $('result').classList.add('hidden');
     $('game').classList.remove('hidden');
 
-    // supprimer un éventuel ancien bouton démarrer
+    // On supprime un éventuel bouton précédent
     const oldBtn = document.getElementById('startGameBtn');
     if(oldBtn) oldBtn.remove();
 
     if(state.mode === "chrono"){
-      // On met un message d'attente + bouton "Démarrer l'exercice"
+
       $('question').textContent = "Clique sur ▶️ Démarrer l’exercice";
       $('progress').textContent = `0/${state.numQuestions}`;
       $('answer').value = "";
-      $('answer').style.visibility = 'visible'; // visible pour chrono
+      $('answer').style.visibility = 'visible';
 
-      createNumpad(); // pavé prêt quand on commence
+      createNumpad();
 
       let btn = document.createElement("button");
       btn.id = "startGameBtn";
       btn.textContent = "▶️ Démarrer l’exercice";
       btn.className = "button";
       btn.style.marginTop = "20px";
+
       btn.onclick = ()=>{
         state.gameStarted = true;
         btn.remove();
@@ -679,15 +643,16 @@
         startChrono();
         nextQuestion();
       };
+
       $('game').appendChild(btn);
+
     } else {
-      // modes normaux : on lance directement
       nextQuestion();
     }
   };
 
   // --------------------------------------------------
-  // CHRONO SIMPLE (monte jusqu'à la fin)
+  // CHRONO
   // --------------------------------------------------
   function startChrono(){
     if(state.chronoInterval) clearInterval(state.chronoInterval);
